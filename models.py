@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-
+from werkzeug.security import generate_password_hash, check_password_hash
 
 db = SQLAlchemy()
 
@@ -9,6 +9,9 @@ class User(db.Model):
     username = db.Column(db.String(32), unique=True, nullable = False)
     passhash = db.Column(db.String(512), nullable= False)
     name = db.Column(db.String(64), nullable = True)
+    
+    def check_password(self, password):
+        return self.passhash == check_password_hash(self.passhash, password)
 
 class Product(db.Model):
     __tablename__= 'product'

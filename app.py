@@ -10,5 +10,5 @@ db.init_app(app)  # Initialize the database with the app
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()  # Ensure tables are created before running
-    from routes import *  # Import routes after app is fully initialized
+    from routes import *  # Import routes after app is fully initialized.....placed here to avoid circular imports
     app.run(debug=True)  # Runs on http://127.0.0.1:5000/
