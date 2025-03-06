@@ -8,7 +8,8 @@
         <h1>Welcome to Quiz Master</h1>
         <h3>Register</h3>
         <form method="post" class="mt-5">
-            <label for="username" class="form-label">Username: 
+            <div class="register-box">
+            <label for="username" class="form-label">Username(e-mail): 
                 <input type="text" name="username" id="username" class="form-control" required/>
             </label>
             <br>
@@ -16,11 +17,18 @@
                 <input type="text" name="password" id="password" class="form-control" required/>
             </label>
             <br>
-            <label for="name" classname="form-label">Name: 
+            <label for="name" classname="form-label">Full Name: 
                 <input type="text" name="name" id="name" class="form-control" required/>
             </label>
+            <label for="qualification" class="form-label">Qualification: 
+                <input type="text" name="qualification" id="qualification" class="form-control" required/>
+            </label>
+            <label for="date of birth" class="form-label">Date of Birth: 
+                <input type="date of birth" name="date of birth" id="date of birth" class="form-control" required/>
+            </label>
             <br>
-            <input type="submit" value="Register" class="btn btn-success">
+        </div>
+        <button class="register-btn">Register</button>
         </form>
         {% endblock %}
 
@@ -32,13 +40,66 @@
                 align-items: center;
 
             }
+            body{
+                background-color: #EEFDFF;
+            }
             h1{
                 text-align: center;
                 margin-top: 64px;
+                colour: #1B444A;
+                font-family: Timmana;
             }
             h3{
                 text-align: center;
-                margin-top: 64px;
+                margin-top: 34px;
+                font-family: Inria Sans;
+            }
+            .register-box{
+                background-color: #B0C4C7;
+                padding: 15px;
+                border-radius: 45px;          
+                border: 3px solid #1B444A;
+                text-align: center;   
+                margin: 15px 0;
+                text-align: left;
+                width: 520px;
+                height: 300px;
+                
+            }
+            .form-group {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 10px;
+            }
+    
+            .form-group label {
+                font-weight: bold;
+                width: 40%;
+                text-align: left;
+            }
+            input {
+                width: 360px;
+                height: 40px;
+                padding: 2px;
+                margin-left: 150px;
+                margin-top: -8px;
+                margin-bottom: 10px;
+                border-radius: 10px;
+                border: 1.5px solid #2E6D76;
+            }
+            .register-btn{
+                background-color: #D9D9D9;
+                font-family: Inria Sans;
+                color: #1B444A;
+                font-weight: bold;
+                font-size: medium;
+                padding: 10px 15px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                display: block;
+                margin: 10px auto;
+                border: 1.5px solid #2E6D76;
             }
 
 

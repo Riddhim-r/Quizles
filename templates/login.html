@@ -4,37 +4,98 @@
         Login - Quiz app
         {% endblock %}
 
-        {% block content %}
-        <h1>Welcome to Quiz Master</h1>
-        <h3>Login</h3>
-        <form method="post" class="mt-5">
-            <label for="username" class="form-label">Username: 
-                <input type="text" name="username" id="username" class="form-control" required/>
-            </label>
-            <br>
-            <label for="password" class="form-label">Password: 
-                <input type="text" name="password" id="password" class="form-control" required />
-            </label>
-            <input type="submit" value="Login" class="btn btn-success">
-        </form>
-        {% endblock %}
-
         {% block style %}
         <style>
             form{
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-
+            }
+            body{
+                background-color: #EEFDFF;
             }
             h1{
                 text-align: center;
                 margin-top: 64px;
+                colour: #1B444A;
+                font-family: Timmana;
             }
             h3{
                 text-align: center;
                 margin-top: 34px;
+                font-family: Inria Sans;
             }
-
+            .login-box {
+                background-color: #B0C4C7;
+                padding: 15px;
+                border-radius: 45px;          
+                border: 3px solid #1B444A;
+                text-align: center;   
+                margin: 15px 0;
+                text-align: left;
+                width: 520px;
+                height: 160px;
+            }
+            input {
+                width: 360px;
+                height: 40px;
+                padding: 8px;
+                margin-left: 150px;
+                margin-top: 5px;
+                margin-bottom: 10px;
+                border-radius: 10px;
+                border: 1.5px solid #2E6D76;
+            }
+            label {
+                font-style: italic;
+                font-weight: bold;
+                font-size:large;
+                font-family: Inter;
+                color: #2E6D76;
+                
+                
+            }
+            .login-btn {
+                background-color: #D9D9D9;
+                font-family: Inria Sans;
+                color: #1B444A;
+                font-weight: bold;
+                font-size: medium;
+                padding: 10px 15px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                display: block;
+                margin: 10px auto;
+                border: 1.5px solid #2E6D76;
+            }
+            .register {
+                font-size: 14px;
+                font-family: Inria Sans;
+                font-weight: bold;
+                cursor: pointer;
+            }
+            
         </style>
+        {% endblock %}
+
+
+
+
+        {% block content %}
+        <h1>Welcome to Quiz Master</h1>
+        <h3>Login</h3>
+        <form method="post" class="mt-5">
+            <div class="login-box">
+            <label for="username" class="form-label">Username(e-mail): 
+                <input type="text" name="username" id="username" class="form-control" required/>
+            </label>
+            <br>
+            <label for="password" class="form-label">Password: 
+                <input type="text" name="password" id="password" class="form-control" required />
+            </label>
+        </div>
+        <button class="login-btn">Login</button>
+        <p class="register">Create new user?</p>
+        </form>
         {% endblock %}

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Master Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #E6F7F9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 400px;
+        }
+        .title {
+            font-weight: bold;
+            font-size: 20px;
+            background-color: #C5D8D8;
+            padding: 10px;
+            border-radius: 5px;
+            display: inline-block;
+        }
+        .login-box {
+            background-color: #D9EDEE;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            text-align: left;
+        }
+        label {
+            font-style: italic;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .login-btn {
+            background-color: #4F8484;
+            color: white;
+            font-weight: bold;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: block;
+            margin: 10px auto;
+        }
+        .register {
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="title">Welcome to Quiz Master</div>
+        <p>Login</p>
+        <div class="login-box">
+            <label>Username (e-mail):</label>
+            <input type="email" placeholder="Enter your email">
+            <label>Password:</label>
+            <input type="password" placeholder="Enter your password">
+        </div>
+        <button class="login-btn">Login</button>
+        <p class="register">Create new user?</p>
+    </div>
+
+</body>
+</html>
