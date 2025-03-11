@@ -1,135 +1,118 @@
 {% extends 'layout.html' %}
 
 {% block title %}
-        Login - Quiz app
-        {% endblock %}
+    Login - Quizles
+{% endblock %}
 
-        {% block style %}
-        <style>
-            form{
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-            }
-            body{
-                background-color: #EEFDFF;
-                justify-content: center;
-                align-items: center;
-                text-align: center;
-            }
-            h1{
-                justify-content: center;
-                margin-top: 10px;
-                color: #2E6D76;
-                font-family: Timmana;
-            }
-            h3{
-                text-align: center;
-                margin-top: 34px;
-                font-family: Inria Sans;
-            }
-            .login-box {
-                background-color: #B0C4C7;
-                padding: 15px;
-                border-radius: 45px;          
-                border: 3px solid #1B444A;
-                   
-                margin: 15px 0;
-                text-align: left;
-                width: 520px;
-                height: 140px;
-            }
-            .box {
-                background-color: #D9D9D9;
-                padding: 15px; 
-                text-align: center;   
-                margin-top: 64px;
-                width: 420px;
-                height: 30px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                margin-left: 450px;
-            }
-            
-            .form-group {
-                
-                align-items: center;
-                margin-bottom: 15px;
-                margin-top: 7px;
-            }
-            
-            label {
-                width: 150px; /* Adjust width as needed */
-                text-align: right;
-                margin-right: 10px; /* Space between label and input */
-                font-style: italic;
-                font-weight: bold;
-                font-size: large;
-                font-family: Inter;
-                color: #2E6D76;               
-            }
-            
-            input {
-                width: 360px;
-                height: 40px;
-                padding: 10px;
-                margin-left: 150px;
-                border-radius: 10px;
-                border: 2.5px solid #2E6D76;
-                margin-top: -23px;
-                
-            }
-            
-            .login-btn {
-                background-color: #D9D9D9;
-                font-family: Inria Sans;
-                color: #2E6D76;
-                font-weight: bolder;
-                font-size: larger;
-                padding: 10px 15px;
-                border: none;
-                border-radius: 5px;
-                cursor: pointer;
-                display: block;
-                margin: 10px auto;
-                border: 1.5px solid #2E6D76;
-            }
-            .register {
-                font-size: 14px;
-                font-family: Inria Sans;
-                font-weight: bold;
-                cursor: pointer;
-                font-size: large;
-                
-            }
-            
-        </style>
-        {% endblock %}
+{% block style %}
+    <style>
+        body {
+            background-color: #EEFDFF;
+            text-align: center;
+            font-family: Inria Sans;
+        }
+        .box {
+            background-color: #D9D9D9;
+            padding: 15px; 
+            text-align: center;   
+            margin-top: 80px;
+            width: 420px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-left: auto;
+            margin-right: auto;
+            border-radius: 10px;
+        }
+        .login-wrapper {
+            max-width: 600px;
+            margin: 40px auto;
+            background-color: #B0C4C7;
+            padding: 30px 40px;
+            border-radius: 45px;
+            border: 3px solid #1B444A;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            color: #2E6D76;
+            font-family: Timmana;
+            margin-top: 10px;
+        }
+        h3 {
+            margin-top: 34px;
+            font-family: Inria Sans;
+        }
+        .form-group {
+            margin-bottom: 20px;
+            display: flex;
+            width: 100%;
+            align-items: center;
+            justify-content: space-between;
+        }
+        label {
+            width: 150px;
+            text-align: right;
+            margin-right: 10px;
+            font-style: italic;
+            font-weight: bold;
+            font-size: large;
+            font-family: Inter;
+            color: #2E6D76;
+        }
+        input {
+            flex-grow: 1;
+            width: 100%;
+            max-width: 360px;
+            height: 40px;
+            padding: 10px;
+            border-radius: 10px;
+            border: 2.5px solid #2E6D76;
+        }
+        .login-btn {
+            background-color: #D9D9D9;
+            font-family: Inria Sans;
+            color: #2E6D76;
+            font-weight: bolder;
+            font-size: larger;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            border: 1.5px solid #2E6D76;
+        }
+        .register {
+            font-size: large;
+            font-family: Inria Sans;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
+{% endblock %}
 
+{% block content %}
+    <div class="box">
+        <h1>Welcome to Quizles</h1>
+    </div>
+    <h3>Login</h3>
 
-
-
-        {% block content %}
-        <div class="box">
-        <h1>Welcome to Quiz Master</h1>
-        </div>
-        <h3>Login</h3>
-        <form method="post" class="mt-5">
-            <div class="login-box">
-                <div class="form-group">
-            <label for="username" class="form-label">Username(e-mail): 
-                <input type="text" name="username" id="username" class="form-control" required/>
-            </label>
-        </div>
-            <br>
+    <div class="login-wrapper">
+        <form method="POST" style="width: 100%;">
             <div class="form-group">
-            <label for="password" class="form-label">Password: 
-                <input type="text" name="password" id="password" class="form-control" required />
-            </label>
-        </div>
-        </div>
-        <button class="login-btn">Login</button>
-        <p class="register">Create new user?</p>
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" class="form-control" required />
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" class="form-control" required />
+            </div>
+            <button class="login-btn">Login</button>
         </form>
-        {% endblock %}
+        <p class="register">
+            Don't have an account? <a href="{{ url_for('register') }}">Register here</a>
+        </p>
+    </div>
+{% endblock %}
