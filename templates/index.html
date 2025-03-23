@@ -1,6 +1,104 @@
 {% extends 'layout.html' %}
+{% block title %}
+   Quizles
+{% endblock %}
+{% block style %}
+    <style>
+      body {
+        
+        text-align: center;
+        background-color: #EEFDFF;
+            background-size: cover; /* Cover the entire screen */
+            background-position: center; /* Center the image */
+            background-repeat: no-repeat; /* Prevent repeating */
+            
+    }
+    h2 {
+      font-family: 'Irish Grover', cursive;
+      font-size: 40px;
+      margin: 0;
+      font-weight:900;
+      
+    }
+    main {
+      padding: 40px;
+      text-align: left;
+      max-width: 700px;
+      margin: 0 auto;
+      margin-right: 600px;
+    }
+    main h2 {
+      font-family: 'Inknut Antiqua', serif;
+      font-size: 34px;
+      font-weight: 700; /* Bold by default */
+      
+      margin-bottom: 20px;
+      line-height: 1.6;
+      color: #1B444A;
+    }
+    main h2 .regular {
+      font-weight: 500; /* Regular */
+      color: #1B444A;
+      font-family:cursive;
+      font-weight:bold;
+      font-size: 45px;
+    }
+
+    main h2 span {
+      font-weight:bolder; /* Bold */
+      color: #000;
+      font-size: 48px;
+    }
+    
+  .image-container img {
+      width: 100%;
+      border-radius: 50px;
+      text-align: right;
+  }
+  .image-container {
+    width: 120%;
+    display: flex;
+      justify-content: flex-end;
+      text-align: right;
+      margin-left: 580px;
+      margin-top: -320px;
+}
+
+
+  .login-btn {
+    background-color: #D9D9D9;
+    font-family: Inria Sans;
+    color: #31595f;
+    font-weight: bolder;
+    font-size: larger;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    border: 1.5px solid #2E6D76;
+    width: 150;
+}
+
+    
+    </style>
+    {% endblock %}
+
 
 {% block content %}
-  <h1>Quizles</h1>
-  <p>Welcome, dear {{ user.name }}. This is your Quizles dashboard.</p>
+  <h2>Quizles</h2>
+  <main>
+    <h2>
+      <span class="regular">Hard work drive</span> <span>success</span>,<br>
+      <span>Quizles</span> <span class="regular">sharpens mind</span><br>
+      <span class="regular">and</span> <span>Engineers</span> <br> <span class="regular">achieve top</span> <span>Scores</span>.
+    </h2>
+    <div class="image-container">
+      <img src="https://img.freepik.com/premium-vector/male-female-characters-analyzing-performance_1334819-12096.jpg" alt="Illustration">
+  </div>
+
+  </main>
+  <a href="login.html">
+  <button class="login-btn">Login</button>
+</a>
 {% endblock %}
