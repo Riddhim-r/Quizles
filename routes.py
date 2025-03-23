@@ -1,13 +1,28 @@
 from datetime import datetime
+from functools import wraps
 from flask import render_template, request, flash, redirect, url_for, session 
 from app import app
 from models import db, User
 
-@app.route('/')
+def authenticate(func):   
+    @wraps(func)
+    def wrapper(*args, **kwargs): 
+        if 'user_id' not in session: 
+            flash('You must be logged in to view this page!', 'error')
+            return redirect(url_for('login'))   
+        return func(*args, **kwargs)    
+    return wrapper
+
+@app.route('/')  # this is a decorator(wrap a function and modify its behavior)
+@authenticate
 def index():
-    if 'user_id' not in session:
-        return redirect(url_for('login'))
-    return render_template('index.html', user=User.query.get(session['user_id']))
+    return render_template('index.html', user=User.query.get(session['user_id'])) # <-- pass the user object to the template and show the user name on the page
+
+@app.route('/profile')
+@authenticate
+def profile():
+    return render_template('profile.html', user=User.query.get(session['user_id']))
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
