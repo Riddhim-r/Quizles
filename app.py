@@ -1,40 +1,37 @@
 import os
 from flask import Flask
-from datetime import datetime
 from config import Config
 from models import db, User
+import datetime  
 
 app = Flask(__name__)
 app.config.from_object(Config)
 db.init_app(app)
 
-def ensure_admin_user():
-    admin = User.query.filter_by(username='admin').first()
-    if not admin:
-        admin_email = os.getenv("ADMIN_EMAIL", "admin@quizles.app")
-        admin_dob_str = os.getenv("ADMIN_DOB", "2000-01-01")
-        admin_dob = datetime.strptime(admin_dob_str, '%Y-%m-%d')
+# ✅ Import routes and register Blueprint after app is initialized
+from routes import routes_bp
+app.register_blueprint(routes_bp, url_prefix="")  # No prefix ensures root-level routes
 
-        admin = User(
+# ✅ Create tables and admin user if not exists
+with app.app_context():
+    db.create_all()
+
+    if not User.query.filter_by(username='admin').first():
+        admin_user = User(
             username='admin',
+            email='admin@example.com',
             name='Admin',
-            email=admin_email,
-            dob=admin_dob,
-            is_admin=True
+            is_admin=True,
+            dob=datetime.date(2000, 1, 1)
         )
-        admin.password = 'admin123'
-        db.session.add(admin)
+        admin_user.password = "admin123"
+        db.session.add(admin_user)
         db.session.commit()
-        print("✅ Admin user created.")
+        print("✅ Admin user created successfully!")
 
-# 🔥 Now import routes after app is fully defined (no circular crash)
-from routes import *
+# ✅ Register CLI commands
+from commands import register_commands
+register_commands(app)
 
 if __name__ == "__main__":
-    with app.app_context():
-        db.create_all()
-        ensure_admin_user()
     app.run(debug=True)
-
-from commands import seed_branches
-app.cli.add_command(seed_branches)

@@ -130,12 +130,12 @@
                 <label for="branch_id">Branch:</label>
                 <select id="branch_id" name="branch_id" class="form-control" required>
                     {% for branch in branches %}
-                    <option value="1">Electronics and Telecommunication</option>
-                    <option value="2">Information Technology</option>
-                    <option value="3">Data Science</option>
+                        <option value="{{ branch.id }}">{{ branch.name }}</option>
                     {% endfor %}
                 </select>
             </div>
+            
+            
             <div class="form-group">
                 <label for="password">Password:</label>
                 <input type="password" id="password" name="password" class="form-control" required />
@@ -143,7 +143,7 @@
             <button class="register-btn">Register</button>
         </form>
         <p class="login">
-            Already have an account? <a href="{{ url_for('login') }}">Login here</a>
+            <a href="{{ url_for('routes.login') }}">Login here</a>
         </p>
     </div>
 {% endblock %}

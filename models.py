@@ -4,12 +4,17 @@ from datetime import datetime
 
 db = SQLAlchemy()
 
+from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import generate_password_hash, check_password_hash
+
+db = SQLAlchemy()
+
 class User(db.Model):
     __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True, nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
-    passhash = db.Column(db.String(200), nullable=False)
+    passhash = db.Column(db.String(200), nullable=False)  # ✅ Keep only this for passwords
     name = db.Column(db.String(50), nullable=False)
     dob = db.Column(db.Date, nullable=False)
     is_admin = db.Column(db.Boolean, nullable=False, default=False)
@@ -22,10 +27,13 @@ class User(db.Model):
 
     @password.setter
     def password(self, password):
-        self.passhash = generate_password_hash(password)
+        """Hash the password before storing it."""
+        self.passhash = generate_password_hash(password)  # ✅ Save hash in passhash
 
     def check_password(self, password):
-        return check_password_hash(self.passhash, password)
+        """Verify the password."""
+        return check_password_hash(self.passhash, password)  # ✅ Use passhash
+
 
 
 class Branch(db.Model):
