@@ -1,54 +1,65 @@
 from datetime import datetime
 from functools import wraps
-from flask import render_template, request, flash, redirect, url_for, session
+from flask import Blueprint, render_template, request, flash, redirect, url_for, session
 from models import db, User, Branch
-from werkzeug.security import generate_password_hash, check_password_hash 
-from app import app # Ensure correct password handling
+from werkzeug.security import generate_password_hash, check_password_hash
 
-with app.app_context():
-    branches = Branch.query.all()  
-    
+# ✅ Define the Blueprint properly
+routes_bp = Blueprint("routes", __name__)
+
+# ✅ Debugging: Log when routes.py loads
+print("🔹 routes.py loaded successfully")
+
 # Authentication decorator
-def authenticate(func):   
+def authenticate(func):
     @wraps(func)
-    def wrapper(*args, **kwargs): 
-        if 'user_id' not in session: 
+    def wrapper(*args, **kwargs):
+        if 'user_id' not in session:
             flash('You must be logged in to view this page!', 'error')
-            return redirect(url_for('login'))   
-        return func(*args, **kwargs)    
+            return redirect(url_for('routes.login'))  # ✅ Blueprint reference fixed
+        return func(*args, **kwargs)
     return wrapper
 
-# Homepage route (Protected)
-@app.route('/')  
-@authenticate
+# ✅ Debugging: Ensure this route works
+@routes_bp.route("/")
 def index():
-    return render_template('index.html', user=User.query.get(session['user_id']))  
+    print("🔹 index() route called")
+    return redirect(url_for('routes.login'))  # ✅ Fixed Blueprint reference
 
-
-# Login route
-@app.route('/login', methods=['GET', 'POST'])
+# ✅ Login route
+@routes_bp.route("/login", methods=['GET', 'POST'])
 def login():
+    print("🔹 login() route called")
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        
+
         user = User.query.filter_by(username=username).first()
         if not user:
             flash('User not found!', 'error')
-            return redirect(url_for('login'))
-        
-        if not user.check_password(password): 
+            return redirect(url_for('routes.login'))
+
+        if not check_password_hash(user.password, password):
             flash('Incorrect password!', 'error')
-            return redirect(url_for('login'))
-        
-        session['user_id'] = user.id  # Store user ID in session
+            return redirect(url_for('routes.login'))
+
+        session['user_id'] = user.id
         flash('Login successful!', 'success')
-        return redirect(url_for('index'))
-    
+        return redirect(url_for('routes.index'))
+
     return render_template('login.html')
 
-@app.route('/register', methods=['GET', 'POST'])
+# ✅ Register route (with debugging)
+@routes_bp.route("/register", methods=['GET', 'POST'])
 def register():
+    print("🔹 register() route called")  # Debugging
+
+    try:
+        branches = Branch.query.all()
+    except Exception as e:
+        print(f"⚠️ Database error fetching branches: {e}")
+        branches = []  # Prevent crashing if database query fails
+
     if request.method == 'POST':
         username = request.form['username'].strip()
         password = request.form['password'].strip()
@@ -59,11 +70,11 @@ def register():
 
         if not username or not password:
             flash('Username and Password cannot be empty!', 'error')
-            return redirect(url_for('register'))
+            return redirect(url_for('routes.register'))  # ✅ Fixed reference
 
         if User.query.filter_by(username=username).first():
             flash('User already exists!', 'error')
-            return redirect(url_for('register'))
+            return redirect(url_for('routes.register'))
 
         user = User(
             username=username,
@@ -72,21 +83,19 @@ def register():
             dob=datetime.strptime(dob, '%Y-%m-%d'),
             branch_id=int(branch_id) if branch_id else None  
         )
-        user.password = generate_password_hash(password)  
+        user.password = generate_password_hash(password)
 
-        with app.app_context():
-            db.session.add(user)
-            db.session.commit()
+        db.session.add(user)
+        db.session.commit()
 
         flash('User registered successfully!', 'success')
-        return redirect(url_for('login'))
+        return redirect(url_for('routes.login'))
 
     return render_template('register.html', branches=branches)
 
-
-# Logout route
-@app.route('/logout')
+# ✅ Logout route
+@routes_bp.route("/logout")
 def logout():
-    session.pop('user_id', None)  
+    session.pop('user_id', None)
     flash("Logged out successfully!", "success")
-    return redirect(url_for('index'))
+    return redirect(url_for('routes.index'))
