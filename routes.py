@@ -7,24 +7,19 @@ from werkzeug.security import generate_password_hash, check_password_hash
 # ✅ Define the Blueprint properly
 routes_bp = Blueprint("routes", __name__)
 
-# ✅ Debugging: Log when routes.py loads
-print("🔹 routes.py loaded successfully")
-
 # Authentication decorator
 def authenticate(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         if 'user_id' not in session:
             flash('You must be logged in to view this page!', 'error')
-            return redirect(url_for('routes.login'))  # ✅ Blueprint reference fixed
+            return redirect(url_for('routes.login'))  
         return func(*args, **kwargs)
     return wrapper
 
-# ✅ Debugging: Ensure this route works
 @routes_bp.route("/")
 def index():
-    print("🔹 index() route called")
-    return redirect(url_for('routes.login'))  # ✅ Fixed Blueprint reference
+    return redirect(url_for('routes.login'))  
 
 # ✅ Login route
 @routes_bp.route("/login", methods=['GET', 'POST'])
@@ -42,12 +37,35 @@ def login():
         if not user.check_password(password):
             flash('Incorrect password!', 'error')
             return redirect(url_for('routes.login'))
+        
+         # If the user is an admin, redirect to the admin homepage
+        if user.is_admin:
+            session['user_id'] = user.id
+            flash('Admin login successful!', 'success')
+            return redirect(url_for('routes.admin_home'))
 
+        #otherwise, redirect to the user homepage
         session['user_id'] = user.id
         flash('Login successful!', 'success')
         return redirect(url_for('routes.index'))
 
     return render_template('login.html')
+
+# ✅ Admin homepage route (accessible only after successful admin login)
+@routes_bp.route('/admin-home')
+def admin_home():
+    # Check if the logged-in user is an admin
+    user_id = session.get('user_id')
+    if not user_id:
+        flash('You must be logged in to access the admin dashboard!', 'error')
+        return redirect(url_for('routes.login'))
+
+    user = User.query.get(user_id)
+    if not user or not user.is_admin:
+        flash('Access restricted. Admins only!', 'error')
+        return redirect(url_for('routes.index'))
+
+    return render_template('admin/admin_home.html')  # Render the admin homepage (from templates/admin)
 
 # ✅ Register route (with debugging)
 @routes_bp.route("/register", methods=['GET', 'POST'])
