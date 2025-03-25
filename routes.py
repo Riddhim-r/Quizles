@@ -1,9 +1,14 @@
 from datetime import datetime
 from functools import wraps
-from flask import render_template, request, flash, redirect, url_for, session 
-from app import app
-from models import db, User
+from flask import render_template, request, flash, redirect, url_for, session
+from models import db, User, Branch
+from werkzeug.security import generate_password_hash, check_password_hash 
+from app import app # Ensure correct password handling
 
+with app.app_context():
+    branches = Branch.query.all()  
+    
+# Authentication decorator
 def authenticate(func):   
     @wraps(func)
     def wrapper(*args, **kwargs): 
@@ -13,47 +18,46 @@ def authenticate(func):
         return func(*args, **kwargs)    
     return wrapper
 
-@app.route('/')  # this is a decorator(wrap a function and modify its behavior)
+# Homepage route (Protected)
+@app.route('/')  
 @authenticate
 def index():
-    return render_template('index.html', user=User.query.get(session['user_id'])) # <-- pass the user object to the template and show the user name on the page
-
-@app.route('/profile')
-@authenticate
-def profile():
-    return render_template('profile.html', user=User.query.get(session['user_id']))
+    return render_template('index.html', user=User.query.get(session['user_id']))  
 
 
+# Login route
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+        
         user = User.query.filter_by(username=username).first()
         if not user:
             flash('User not found!', 'error')
             return redirect(url_for('login'))
-        if not user.check_password(password):
+        
+        if not check_password_hash(user.password, password):  # Ensure proper password validation
             flash('Incorrect password!', 'error')
             return redirect(url_for('login'))
-        session['user_id'] = user.id  # <-- move inside POST block
+        
+        session['user_id'] = user.id  # Store user ID in session
         flash('Login successful!', 'success')
         return redirect(url_for('index'))
+    
     return render_template('login.html')
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    from models import Branch  # Ensure Branch model is accessible
-
     if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        name = request.form['name']
-        email = request.form['email']
-        dob = request.form['dob']
-        branch_id = request.form['branch_id']
+        username = request.form['username'].strip()
+        password = request.form['password'].strip()
+        name = request.form['name'].strip()
+        email = request.form['email'].strip()
+        dob = request.form['dob'].strip()
+        branch_id = request.form.get('branch_id')
 
-        if not username.strip() or not password.strip():
+        if not username or not password:
             flash('Username and Password cannot be empty!', 'error')
             return redirect(url_for('register'))
 
@@ -66,20 +70,23 @@ def register():
             name=name,
             email=email,
             dob=datetime.strptime(dob, '%Y-%m-%d'),
-            branch_id=branch_id
+            branch_id=int(branch_id) if branch_id else None  
         )
-        user.password = password
-        db.session.add(user)
-        db.session.commit()
+        user.password = generate_password_hash(password)  
+
+        with app.app_context():
+            db.session.add(user)
+            db.session.commit()
+
         flash('User registered successfully!', 'success')
         return redirect(url_for('login'))
 
-    branches = Branch.query.all()
     return render_template('register.html', branches=branches)
 
 
-
+# Logout route
 @app.route('/logout')
 def logout():
-    session.pop('user_id', None) # remove the user_id from the session, effectively logging them out
-    return redirect(url_for('index')) # redirecting them to the home page
+    session.pop('user_id', None)  
+    flash("Logged out successfully!", "success")
+    return redirect(url_for('index'))
