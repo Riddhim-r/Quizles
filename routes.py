@@ -37,7 +37,7 @@ def login():
             flash('User not found!', 'error')
             return redirect(url_for('login'))
         
-        if not check_password_hash(user.password, password):  # Ensure proper password validation
+        if not user.check_password(password): 
             flash('Incorrect password!', 'error')
             return redirect(url_for('login'))
         

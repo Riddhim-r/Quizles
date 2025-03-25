@@ -8,3 +8,6 @@ class Config:
 
     SQLALCHEMY_TRACK_MODIFICATIONS = os.getenv('SQLALCHEMY_TRACK_MODIFICATIONS', 'False') == 'True'
     SECRET_KEY = os.getenv('SECRET_KEY', 'mysecretkey')
+    DEBUG = True  
+
+
