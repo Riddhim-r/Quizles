@@ -29,7 +29,6 @@ def index():
 # ✅ Login route
 @routes_bp.route("/login", methods=['GET', 'POST'])
 def login():
-    print("🔹 login() route called")
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -39,7 +38,8 @@ def login():
             flash('User not found!', 'error')
             return redirect(url_for('routes.login'))
 
-        if not check_password_hash(user.password, password):
+        # ✅ Use check_password() method instead of directly accessing `passhash`
+        if not user.check_password(password):
             flash('Incorrect password!', 'error')
             return redirect(url_for('routes.login'))
 
@@ -52,13 +52,7 @@ def login():
 # ✅ Register route (with debugging)
 @routes_bp.route("/register", methods=['GET', 'POST'])
 def register():
-    print("🔹 register() route called")  # Debugging
-
-    try:
-        branches = Branch.query.all()
-    except Exception as e:
-        print(f"⚠️ Database error fetching branches: {e}")
-        branches = []  # Prevent crashing if database query fails
+    branches = Branch.query.all()
 
     if request.method == 'POST':
         username = request.form['username'].strip()
@@ -70,7 +64,7 @@ def register():
 
         if not username or not password:
             flash('Username and Password cannot be empty!', 'error')
-            return redirect(url_for('routes.register'))  # ✅ Fixed reference
+            return redirect(url_for('routes.register'))
 
         if User.query.filter_by(username=username).first():
             flash('User already exists!', 'error')
@@ -83,7 +77,8 @@ def register():
             dob=datetime.strptime(dob, '%Y-%m-%d'),
             branch_id=int(branch_id) if branch_id else None  
         )
-        user.password = generate_password_hash(password)
+        
+        user.password = password  # ✅ This will trigger the setter method
 
         db.session.add(user)
         db.session.commit()
@@ -92,6 +87,7 @@ def register():
         return redirect(url_for('routes.login'))
 
     return render_template('register.html', branches=branches)
+
 
 # ✅ Logout route
 @routes_bp.route("/logout")
