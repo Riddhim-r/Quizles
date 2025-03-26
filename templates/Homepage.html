@@ -1,7 +1,9 @@
 {% extends 'layout.html' %}
+
 {% block title %}
-   Quizles
+   Quizles, Homepage
 {% endblock %}
+
 {% block style %}
     <style>
         body {
@@ -20,7 +22,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 15px 20px;
-            height: 15px;
+            height: 50px;
             box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
             border: 2.5px solid black; 
         }
@@ -42,7 +44,6 @@
             flex-direction: column;
             gap: 30px;
         }
-
         .btn {
             background-color: #e0e0e0;
             border: 4px solid #2E6D76;
@@ -59,9 +60,7 @@
             cursor: pointer;
             box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2);
             transition: all 0.2s ease;
-            
         }
-
         .btn:hover {
             background-color: #d5d5d5;
         }
@@ -74,7 +73,6 @@
             padding: 10px;
             text-align: center;
         }
-        
         h2 {
             font-family: 'Poppins', sans-serif;
             font-size: 28px;
@@ -91,35 +89,30 @@
         .header h3 {
             font-size: 30px;
             font-weight: bold;
-            font-family: Irish Grover;
+            font-family: 'Irish Grover', cursive;
         }
-        
+    </style>
+{% endblock %}
 
-        </style>
-        {% endblock %}
+{% block content %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Irish+Grover&display=swap" rel="stylesheet">
 
-        {% block content %}
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Irish+Grover&display=swap" rel="stylesheet">
-
-
-        <div class="header">
-            <h3>Hello, Username</h3>
-            <a href="user.html">
+    <div class="header">
+        <h3>Hello, {{ username }}</h3>
+        <a href="profile">
             <div class="user-icon">👤</div>
         </a>
-        </div>
-        <h1>Game On! Pick a Quiz & Play!</h1>
-        <h2>Start Your Quiz Journey!</h2>
-        
+    </div>
     
-        <!-- Buttons Section -->
-        <div class="container">
-            <button class="btn">Select Subject</button>
-            <button class="btn">Select Quiz</button>
-            <button class="btn">Start Quiz</button>
-        </div>
-    
+    <h1>Game On! Pick a Quiz & Play!</h1>
+    <h2>Start Your Quiz Journey!</h2>
 
-        {% endblock %}
+    <!-- Buttons Section -->
+    <div class="container">
+        <button class="btn">Select Subject</button>
+        <button class="btn">Select Quiz</button>
+        <button class="btn">Start Quiz</button>
+    </div>
+{% endblock %}

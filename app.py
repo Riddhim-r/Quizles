@@ -5,6 +5,7 @@ from models import db, User
 import datetime  
 
 app = Flask(__name__)
+app.secret_key = "secret"  # Required for session management   
 app.config.from_object(Config)
 db.init_app(app)
 

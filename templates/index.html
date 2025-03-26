@@ -65,19 +65,17 @@
 }
 
 
-  .login-btn {
-    background-color: #D9D9D9;
-    font-family: Inria Sans;
-    color: #31595f;
-    font-weight: bolder;
-    font-size: larger;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 10px;
-    border: 1.5px solid #2E6D76;
-    width: 150;
+.login-btn {
+  background-color: #2E6D76;
+  font-family: 'Irish Grover', cursive;
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  padding: 15px 40px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 0.3s;
 }
 
     
@@ -98,7 +96,7 @@
   </div>
 
   </main>
-  <a href="login.html">
+  <a href="{{ url_for('routes.login') }}">
   <button class="login-btn">Login</button>
 </a>
 {% endblock %}
