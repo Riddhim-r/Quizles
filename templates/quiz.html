@@ -1,0 +1,78 @@
+{% extends 'layout.html' %}
+{% block title %}
+   Quizles
+{% endblock %}
+{% block style %}
+    <style>
+        body {
+            background-color: #EEFDFF; /* Light blue background */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+        }
+        .header {
+            width: 100%;
+            background-color: #EEFDFF; /* Light blue */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            height: 20px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            border: 2.5px solid black; 
+            gap: 2px;
+        }
+        .timer {
+            font-size: 27px;
+            font-weight: bold;
+            font-family: Irish grover;
+            row-gap: 2px;
+        }
+        .timer p{
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 22px;
+            gap: 2px;
+        }
+        .menu{
+            
+            border: 5px black;
+           
+        }
+
+    </style>
+    {% endblock %}
+
+    {% block content %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Irish+Grover&display=swap" rel="stylesheet">
+
+<div class="header">
+    <div class="timer">⏸ Time left <b>00 : 10 : 00</b>
+    <p><b>EXTC - Embedded System</b></p></div>
+    <div class="menu">☰</div>
+</div>
+<p><b>EXTC - Embedded System</b></p>
+<hr>
+<div class="question">
+    <p><b>Question NO.1</b></p>
+    <p>hbk3dgwhk3iy ...........................................</p>
+</div>
+<div class="options">
+    <button>1.</button>
+    <button>2.</button>
+    <button>3.</button>
+    <button>4.</button>
+</div>
+<div class="buttons">
+    <button>Mark & Next</button>
+    <button>Clear</button>
+    <button>Save & Next</button>
+</div>
+
+
+
+    {% endblock %}
