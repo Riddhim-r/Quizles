@@ -4,7 +4,7 @@ from flask import Blueprint, render_template, request, flash, redirect, url_for,
 from models import db, User, Branch
 from werkzeug.security import generate_password_hash, check_password_hash
 
-# ✅ Define the Blueprint properly
+# ⪼ Define the Blueprint properly
 routes_bp = Blueprint("routes", __name__)
 
 # Authentication decorator
@@ -20,9 +20,9 @@ def authenticate(func):
 #first page after running the server
 @routes_bp.route("/")
 def index():
-    return render_template('index.html')  
+    return render_template('/index.html')  
 
-# ✅ Register route (with debugging)
+# ⪼ Register route (with debugging)
 @routes_bp.route("/register", methods=['GET', 'POST'])
 def register():
     branches = Branch.query.all()
@@ -51,7 +51,7 @@ def register():
             branch_id=int(branch_id) if branch_id else None  
         )
         
-        user.password = password  # ✅ This will trigger the setter method
+        user.password = password  # ⪼ This will trigger the setter method
 
         db.session.add(user)
         db.session.commit()
@@ -59,9 +59,9 @@ def register():
         flash('User registered successfully!', 'success')
         return redirect(url_for('routes.login'))
 
-    return render_template('register.html', branches=branches)
+    return render_template('user/register.html', branches=branches)
 
-# ✅ Login route
+# ⪼ Login route
 @routes_bp.route("/login", methods=['GET', 'POST'])
 def login():
     print(f"Session Data: {session}")  # Debugging
@@ -96,7 +96,7 @@ def login():
         print(f"Session after login: {session}")
         return redirect(url_for('routes.homepage'))
 
-    return render_template('login.html')
+    return render_template('user/login.html')
 
 #after login, this will be the 1st page
 @routes_bp.route("/homepage")
@@ -104,7 +104,7 @@ def login():
 def homepage():
     username = session.get('username', 'Guest')  # Fetch username from session
     print(f"Username in session: {session.get('username')}")
-    return render_template('homepage.html', username=username)  # ✅ Pass username to template
+    return render_template('user/homepage.html', username=username)  # ⪼ Pass username to template
 
 
 @routes_bp.route("/profile")
@@ -113,11 +113,11 @@ def profile():
     print(f"Session Data: {session}")  # Debugging
     name = session.get('name', 'Guest')  # Fetch name or default to Guest
     email = session.get('email', 'No email found')  # Fetch email or default
-    print(f"Profile Page - Name: {name}, Email: {email}")  # ✅ Debugging
-    return render_template('profile.html', name=name, email=email)
+    print(f"Profile Page - Name: {name}, Email: {email}")  # Debugging
+    return render_template('user/profile.html', name=name, email=email)
 
 
-# ✅ Admin homepage route (accessible only after successful admin login)
+# ⪼ Admin homepage route after putting in the admin credentials
 @routes_bp.route('/admin-home')
 @authenticate
 def admin_home():
@@ -129,12 +129,12 @@ def admin_home():
 
     user = User.query.get(user_id)
     if not user or not user.is_admin:
-        flash('Access restricted. Admins only!', 'error')
+        flash('Access restricted. Admins only!', 'error') 
         return redirect(url_for('routes.index'))
 
     return render_template('admin/admin_home.html')  # Render the admin homepage (from templates/admin)
 
-# ✅ Logout route
+# ⪼ Logout route
 @routes_bp.route("/logout")
 def logout():
     session.pop('user_id', None)

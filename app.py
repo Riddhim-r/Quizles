@@ -9,11 +9,11 @@ app.secret_key = "secret"  # Required for session management
 app.config.from_object(Config)
 db.init_app(app)
 
-# ✅ Import routes and register Blueprint after app is initialized
+# ⪼ Import routes and register Blueprint after app is initialized
 from routes import routes_bp
 app.register_blueprint(routes_bp, url_prefix="")  # No prefix ensures root-level routes
 
-# ✅ Create tables and admin user if not exists
+# ⪼ Create tables and admin user if not exists
 with app.app_context():
     db.create_all()
 
@@ -28,9 +28,9 @@ with app.app_context():
         admin_user.password = "admin123"
         db.session.add(admin_user)
         db.session.commit()
-        print("✅ Admin user created successfully!")
+        print("⪼ Admin user created successfully!")
 
-# ✅ Register CLI commands
+# ⪼ Register CLI commands
 from commands import register_commands
 register_commands(app)
 
