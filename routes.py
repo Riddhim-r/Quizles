@@ -92,7 +92,7 @@ def login():
         session["username"] = user.username  # Store username
         session["name"] = user.name  # Store full name
         session["email"] = user.email  # Store email
-        flash("Login successful!", "success")
+        flash("User login successful!", "success")
         print(f"Session after login: {session}")
         return redirect(url_for('routes.homepage'))
 

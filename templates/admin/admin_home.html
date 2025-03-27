@@ -1,6 +1,6 @@
 {% extends 'layout.html' %}
 {% block title %}
-   Quizles
+   Quizles - Admin Dashboard
 {% endblock %}
 {% block style %}
     <style>
@@ -32,7 +32,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 22px;
+            font-size: 29px;
             font-weight: bold;
             margin-right: 15px;
         }
@@ -53,7 +53,7 @@
             font-weight: bold;
             font-style: italic;
             text-transform: uppercase;
-            max-width: 1200px; 
+            max-width: 1400px; 
             height: 80px;
             border-radius: 16px;
             cursor: pointer;
@@ -64,7 +64,7 @@
 
         .btn:hover {
             background-color: #d5d5d5;
-        }
+        }        
         h1 {
             font-family: 'Comic sans', cursive; /* Fun handwritten font */
             font-size: 40px;
@@ -105,21 +105,83 @@
 
 
         <div class="header">
-            <h3>Hello, Admin!</h3>
-            <a href="user.html">
-            <div class="user-icon">👨🏻‍💻</div>
-         </a>
+            <h3>Hello, dear Admin! („• ֊ •„)੭</h3>
+            <a href="logout">
+                <div class="user-icon">𓉸</div>
+            </a>
         </div>
         <h1>Welcome to the Admin Dashboard.</h1>
         <h2>You can manage everything under Quizles here.</h2>
         
     
-        <!-- Buttons Section -->
-        <div class="container">
-            <button class="btn">Manage Branch</button>
-            <button class="btn">Manage Subject</button>
-            <button class="btn">Manage Quiz</button>
-        </div>
-    
+       <!-- Buttons Section -->
+<div class="container">
+    <button class="btn" data-bs-toggle="modal" data-bs-target="#branchesModal">Manage Branches</button>
+    <button class="btn" data-bs-toggle="modal" data-bs-target="#subjectsModal">Manage Subjects</button>
+    <button class="btn" data-bs-toggle="modal" data-bs-target="#quizzesModal">Manage Quizzes</button>
+    <button class="btn" data-bs-toggle="modal" data-bs-target="#usersModal">Manage Users</button>
+</div>
 
-        {% endblock %}
+{% endblock %}
+
+{% block modals %}
+<!-- Manage Branches Modal -->
+<div class="modal fade" id="branchesModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Manage Branches</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                Content for managing branches goes here.
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Manage Subjects Modal -->
+<div class="modal fade" id="subjectsModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Manage Subjects</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                Content for managing subjects goes here.
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Manage Quizzes Modal -->
+<div class="modal fade" id="quizzesModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Manage Quizzes</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                Content for managing quizzes goes here.
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Manage Users Modal -->
+<div class="modal fade" id="usersModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Manage Users</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                Content for managing users goes here.
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
