@@ -109,7 +109,6 @@
             <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  
             <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  
             <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  
-    
             <a href="profile">
                 <div class="user-icon">𐀪</div>
             <a href="logout">
@@ -123,9 +122,10 @@
        <!-- Buttons Section -->
         <div class="container">
             <a href="{{ url_for('admin.manage_branch') }}" class="btn">Manage Branches</a>
-            <a href="{{ url_for('admin.manage_chapter') }}" class="btn">Manage Subjects</a>
+            <a href="{{ url_for('admin.manage_subject') }}" class="btn">Manage Subjects</a>
             <a href="{{ url_for('admin.manage_quiz') }}" class="btn">Manage Quizzes</a>
-            <a href="{{ url_for('admin.manage_question') }}" class="btn">Manage Users</a>
+            <a href="{{ url_for('admin.manage_question') }}" class="btn">Manage Questions</a>
+            <a href="{{ url_for('admin.manage_user') }}" class="btn">Manage Users</a>
         </div>
 
 {% endblock %}

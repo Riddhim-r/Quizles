@@ -10,8 +10,10 @@ app.config.from_object(Config)
 db.init_app(app)
 
 # ⪼ Import routes and register Blueprint after app is initialized
-from routes import routes_bp
+from routes import routes_bp, admin_bp
 app.register_blueprint(routes_bp, url_prefix="")  # No prefix ensures root-level routes
+app.register_blueprint(admin_bp)
+
 
 # ⪼ Create tables and admin user if not exists
 with app.app_context():
