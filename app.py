@@ -13,7 +13,6 @@ db.init_app(app)
 from routes import routes_bp, admin_bp
 app.register_blueprint(routes_bp, url_prefix="")  # No prefix ensures root-level routes
 app.register_blueprint(admin_bp)
-app.register_blueprint(admin_bp)
 
 # ⪼ Create tables and admin user if not exists
 with app.app_context():

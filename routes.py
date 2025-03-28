@@ -2,7 +2,8 @@ from datetime import datetime
 from functools import wraps
 from flask import Blueprint, render_template, request, flash, redirect, url_for, session
 from models import *
-from werkzeug.security import generate_password_hash, check_password_hash, NotFound
+from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.exceptions import NotFound
 from forms import RegisterForm, LoginForm, UserDetailsForm, ChangePasswordForm, BranchForm, SubjectForm, ChapterForm, QuizForm, QuestionForm
 
 # ⪼ Define the Blueprint properly
