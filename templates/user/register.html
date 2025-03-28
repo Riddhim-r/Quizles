@@ -1,7 +1,7 @@
 {% extends 'layout.html' %}
 
 {% block title %}
-    Login - Quizles
+    Register - Quizles
 {% endblock %}
 
 {% block style %}
@@ -11,11 +11,12 @@
             text-align: center;
             font-family: Inria Sans;
         }
+
         .box {
             background-color: #D9D9D9;
             padding: 15px; 
             text-align: center;   
-            margin-top: 80px;
+            margin-top: 64px;
             width: 420px;
             height: 50px;
             display: flex;
@@ -25,8 +26,9 @@
             margin-right: auto;
             border-radius: 10px;
         }
-        .login-wrapper {
-            max-width: 600px;
+
+        .register-wrapper {
+            max-width: 700px;
             margin: 40px auto;
             background-color: #B0C4C7;
             padding: 30px 40px;
@@ -36,15 +38,18 @@
             flex-direction: column;
             align-items: center;
         }
+
         h1 {
-            color: #2E6D76;
+            color: hsl(188, 44%, 32%);
             font-family: Timmana;
             margin-top: 10px;
         }
+
         h3 {
             margin-top: 34px;
             font-family: Inria Sans;
         }
+
         .form-group {
             margin-bottom: 20px;
             display: flex;
@@ -52,6 +57,7 @@
             align-items: center;
             justify-content: space-between;
         }
+
         label {
             width: 150px;
             text-align: right;
@@ -62,7 +68,8 @@
             font-family: Inter;
             color: #2E6D76;
         }
-        input {
+
+        input, select {
             flex-grow: 1;
             width: 100%;
             max-width: 360px;
@@ -71,20 +78,21 @@
             border-radius: 10px;
             border: 2.5px solid #2E6D76;
         }
-        .login-btn {
-            background-color: #D9D9D9;
-            font-family: Inria Sans;
-            color: #2E6D76;
-            font-weight: bolder;
-            font-size: larger;
-            padding: 10px 15px;
+
+        .register-btn {
+            background-color: #2E6D76;
+            font-family: 'Irish Grover', cursive;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            padding: 7px 30px;
             border: none;
-            border-radius: 5px;
+            border-radius: 12px;
             cursor: pointer;
-            margin-top: 10px;
-            border: 1.5px solid #2E6D76;
+            transition: 0.3s;
         }
-        .register {
+
+        .login {
             font-size: large;
             font-family: Inria Sans;
             font-weight: bold;
@@ -95,24 +103,47 @@
 
 {% block content %}
     <div class="box">
-        <h1>Welcome to Quizles</h1>
+        <h1>Register at Quizles</h1>
     </div>
-    <h3>Login</h3>
+    <h3>Create Your Account</h3>
 
-    <div class="login-wrapper">
+    <div class="register-wrapper">
         <form method="POST" style="width: 100%;">
             <div class="form-group">
                 <label for="username">Username:</label>
                 <input type="text" id="username" name="username" class="form-control" required />
             </div>
             <div class="form-group">
+                <label for="name">Full Name:</label>
+                <input type="text" id="name" name="name" class="form-control" required />
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" class="form-control" required />
+            </div>
+            <div class="form-group">
+                <label for="dob">Date of Birth:</label>
+                <input type="date" id="dob" name="dob" class="form-control" required />
+            </div>
+            <div class="form-group">
+                <label for="branch_id">Branch:</label>
+                <select id="branch_id" name="branch_id" class="form-control" required>
+                    {% for branch in branches %}
+                        <option value="{{ branch.id }}">{{ branch.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            
+            <div class="form-group">
                 <label for="password">Password:</label>
                 <input type="password" id="password" name="password" class="form-control" required />
             </div>
-            <button class="login-btn">Login</button>
+            <button class="register-btn">Register</button>
         </form>
-        <p class="register">
-            Don't have an account? <a href="register">Register here</a>
+        <p class="login">
+            Already have an account?  <a href="{{ url_for('routes.login') }}">Login here</a>
         </p>
     </div>
 {% endblock %}
+

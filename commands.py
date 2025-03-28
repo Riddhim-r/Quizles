@@ -21,7 +21,7 @@ def seed_branches():
             db.session.add(new_branch)
 
     db.session.commit()
-    print("✅ Branches seeded successfully!")
+    print("⪼ Branches seeded successfully!")
 
 # Make sure this script can be found by Flask
 def register_commands(app):

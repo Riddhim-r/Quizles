@@ -1,6 +1,6 @@
 {% extends 'layout.html' %}
 {% block title %}
-   Quizles
+   Quizles - Admin Dashboard
 {% endblock %}
 {% block style %}
     <style>
@@ -19,8 +19,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 20px;
-            height: 15px;
+            padding: 25px 20px;
+            height: 25px;
             box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
             border: 2.5px solid black; 
         }
@@ -32,12 +32,12 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 18px;
+            font-size: 29px;
             font-weight: bold;
             margin-right: 15px;
         }
         .container {
-            margin-top: 50px;
+            margin-top: 70px;
             display: flex;
             flex-direction: column;
             gap: 30px;
@@ -49,12 +49,12 @@
             color: #2E6D76;
             font-family: Inter;
             padding: 12px 30px;
-            font-size: 32px;
+            font-size: 38px;
             font-weight: bold;
             font-style: italic;
             text-transform: uppercase;
-            max-width: 700px;
-            height: 60px;
+            max-width: 1400px; 
+            height: 80px;
             border-radius: 16px;
             cursor: pointer;
             box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2);
@@ -64,9 +64,9 @@
 
         .btn:hover {
             background-color: #d5d5d5;
-        }
+        }        
         h1 {
-            font-family: 'Pacifico', cursive; /* Fun handwritten font */
+            font-family: 'Comic sans', cursive; /* Fun handwritten font */
             font-size: 40px;
             color: #143c50; /* Dark blue-green */
             text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
@@ -91,7 +91,7 @@
         .header h3 {
             font-size: 30px;
             font-weight: bold;
-            font-family: Irish Grover;
+            font-family: Comic Sans MS;
         }
         
 
@@ -105,21 +105,27 @@
 
 
         <div class="header">
-            <h3>Hello, Admin</h3>
-            <a href="user.html">
-            <div class="user-icon">👤</div>
-         </a>
+            <h3>Hello, dear Admin! („• ֊ •„)੭</h3>
+            <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  
+            <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  
+            <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  
+            <a href="profile">
+                <div class="user-icon">𐀪</div>
+            <a href="logout">
+                <div class="user-icon">𓉸</div>
+            </a>
         </div>
-        <h1>Welcome to the Admin Dashboard</h1>
-        <h2>You can manage subjects, chapters, quizzes, and users here.</h2>
+        <h1>Welcome to the Admin Dashboard.</h1>
+        <h2>You can manage everything under Quizles here.</h2>
         
     
-        <!-- Buttons Section -->
+       <!-- Buttons Section -->
         <div class="container">
-            <button class="btn">Select Branch</button>
-            <button class="btn">Select Subject</button>
-            <button class="btn">Select Quiz Quiz</button>
+            <a href="{{ url_for('admin.manage_branch') }}" class="btn">Manage Branches</a>
+            <a href="{{ url_for('admin.manage_subject') }}" class="btn">Manage Subjects</a>
+            <a href="{{ url_for('admin.manage_quiz') }}" class="btn">Manage Quizzes</a>
+            <a href="{{ url_for('admin.manage_question') }}" class="btn">Manage Questions</a>
+            <a href="{{ url_for('admin.manage_user') }}" class="btn">Manage Users</a>
         </div>
-    
 
-        {% endblock %}
+{% endblock %}
