@@ -106,6 +106,12 @@
 
         <div class="header">
             <h3>Hello, dear Admin! („• ֊ •„)੭</h3>
+            <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  
+            <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  
+            <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  
+    
+            <a href="profile">
+                <div class="user-icon">𐀪</div>
             <a href="logout">
                 <div class="user-icon">𓉸</div>
             </a>
@@ -115,73 +121,11 @@
         
     
        <!-- Buttons Section -->
-<div class="container">
-    <button class="btn" data-bs-toggle="modal" data-bs-target="#branchesModal">Manage Branches</button>
-    <button class="btn" data-bs-toggle="modal" data-bs-target="#subjectsModal">Manage Subjects</button>
-    <button class="btn" data-bs-toggle="modal" data-bs-target="#quizzesModal">Manage Quizzes</button>
-    <button class="btn" data-bs-toggle="modal" data-bs-target="#usersModal">Manage Users</button>
-</div>
-
-{% endblock %}
-
-{% block modals %}
-<!-- Manage Branches Modal -->
-<div class="modal fade" id="branchesModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Manage Branches</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                Content for managing branches goes here.
-            </div>
+        <div class="container">
+            <a href="{{ url_for('admin.manage_branch') }}" class="btn">Manage Branches</a>
+            <a href="{{ url_for('admin.manage_chapter') }}" class="btn">Manage Subjects</a>
+            <a href="{{ url_for('admin.manage_quiz') }}" class="btn">Manage Quizzes</a>
+            <a href="{{ url_for('admin.manage_question') }}" class="btn">Manage Users</a>
         </div>
-    </div>
-</div>
 
-<!-- Manage Subjects Modal -->
-<div class="modal fade" id="subjectsModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Manage Subjects</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                Content for managing subjects goes here.
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Manage Quizzes Modal -->
-<div class="modal fade" id="quizzesModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Manage Quizzes</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                Content for managing quizzes goes here.
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Manage Users Modal -->
-<div class="modal fade" id="usersModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Manage Users</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                Content for managing users goes here.
-            </div>
-        </div>
-    </div>
-</div>
 {% endblock %}
