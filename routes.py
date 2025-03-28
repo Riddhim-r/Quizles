@@ -2,7 +2,8 @@ from datetime import datetime
 from functools import wraps
 from flask import Blueprint, render_template, request, flash, redirect, url_for, session
 from models import *
-from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash, NotFound
+from forms import RegisterForm, LoginForm, UserDetailsForm, ChangePasswordForm, BranchForm, SubjectForm, ChapterForm, QuizForm, QuestionForm
 
 # ⪼ Define the Blueprint properly
 routes_bp = Blueprint("routes", __name__)
@@ -125,7 +126,7 @@ def logout():
 
 admin_bp = Blueprint("admin", __name__, url_prefix="/admin")
 
-# Authorization check for admin
+# Authorization check for admin. This will flash and redirect if unauthorized
 def admin_only():
     user_id = session.get('user_id')
     if not user_id:
@@ -137,13 +138,13 @@ def admin_only():
         flash('Access restricted. Admins only!', 'error')
         return redirect(url_for('routes.index')) 
 
+    return None  # Ensure this returns None when access is granted
 
 # Admin Dashboard (Profile Page)
 @admin_bp.route("/dashboard")
 @authenticate
 def admin_dashboard():
-    if (redirect_response := admin_only()):
-        return redirect_response
+    admin_only()
     return render_template('admin/admin_dashboard.html', name=session.get('name'), email=session.get('email'))
 
 
@@ -151,45 +152,48 @@ def admin_dashboard():
 @admin_bp.route("/admin_home")
 @authenticate
 def admin_home():
-    if (redirect_response := admin_only()):
-        return redirect_response
+    admin_only()
     return render_template('admin/admin_home.html')
 
 # Manage Branches
 @admin_bp.route("/manage_branch")
 @authenticate
 def manage_branch():
-    if (redirect_response := admin_only()):
-        return redirect_response
+    admin_only()
     return render_template("admin/manage_branch.html")
 
 # Manage Subjects
 @admin_bp.route("/manage_subject")
 @authenticate
 def manage_subject():
-    if (redirect_response := admin_only()):
-        return redirect_response
+    admin_only()
     return render_template("admin/manage_subject.html")
+
+# Manage Chpaters
+@admin_bp.route("/manage_chapter")
+@authenticate
+def manage_chapter():
+    admin_only()
+    return render_template("admin/manage_chapter.html")
+
 # Manage Users
 @admin_bp.route("/manage_user")
 @authenticate
 def manage_user():
-    if (redirect_response := admin_only()):
-        return redirect_response
+    admin_only()
     return render_template("admin/manage_user.html")
 
 # Manage Quizzes
 @admin_bp.route("/manage_quiz")
 @authenticate
 def manage_quiz():
-    if (redirect_response := admin_only()):
-        return redirect_response
+    admin_only()
     return render_template("admin/manage_quiz.html")
 
 # Manage Quizzes
 @admin_bp.route("/manage_question")
 @authenticate
 def manage_question():
-    if (redirect_response := admin_only()):
-        return redirect_response
+    admin_only()
     return render_template("admin/manage_question.html")
+

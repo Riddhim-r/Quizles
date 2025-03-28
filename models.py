@@ -40,7 +40,6 @@ class Branch(db.Model):
     __tablename__ = 'branch'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), unique=True, nullable=False)
-    desc = db.Column(db.String(500), nullable=False)
 
     users = db.relationship('User', backref='branch', lazy=True)
     subjects = db.relationship('Subject', backref='branch', lazy=True)
@@ -50,7 +49,6 @@ class Subject(db.Model):
     __tablename__ = 'subject'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), unique=True, nullable=False)
-    desc = db.Column(db.String(500), nullable=False)
     branch_id = db.Column(db.Integer, db.ForeignKey('branch.id'), nullable=True)
 
     chapters = db.relationship('Chapters', backref='subject', lazy=True)
@@ -62,7 +60,6 @@ class Chapters(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     sub_id = db.Column(db.Integer, db.ForeignKey('subject.id'), nullable=False)
     name = db.Column(db.String(50), unique=True, nullable=False)
-    desc = db.Column(db.String(500), nullable=False)
 
     quiz = db.relationship('Quiz', backref='chapter', lazy=True)
 
