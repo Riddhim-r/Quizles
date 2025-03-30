@@ -2,11 +2,12 @@ from functools import wraps
 from flask import Blueprint, render_template, redirect, flash, request, url_for
 from flask_login import current_user, login_required
 from app import db
-from forms import BranchForm, SubjectForm, ChapterForm, QuizForm, QuestionForm
-from models import Branch, Subject, Chapter, Quiz, Question
+from forms import BranchForm, SubjectForm, ChapterForm, QuizForm, QuestionForm, UserForm
+from models import Branch, Subject, Chapter, Quiz, Question, User
 
 
 admin_bp = Blueprint('admin', __name__)
+users_bp = Blueprint('users', __name__)
 
 # Middleware to check admin access
 def admin_login_required(func):
@@ -151,3 +152,71 @@ def delete_item(model, id):
     db.session.commit()
     flash(f"{model.capitalize()} deleted successfully!", category="success")
     return redirect(url_for("admin.handle_crud", model=model))
+
+# Manage Users Page
+@users_bp.route("/admin/manage/users", methods=['GET', 'POST'])
+@admin_login_required
+def manage_users():
+    users = User.query.all()
+    query = request.form.get('query', '')
+
+    # Search Functionality
+    if request.method == 'POST':
+        users = User.query.filter(User.username.ilike(f"%{query}%")).all()
+
+    return render_template("admin/users/manage.html", users=users, query=query)
+
+# Add or Edit User
+@users_bp.route("/admin/users/edit/<int:id>", methods=['GET', 'POST'])
+@users_bp.route("/admin/users/add", methods=['GET', 'POST'])
+@admin_login_required
+def add_edit_user(id=None):
+    user = User.query.get(id) if id else None
+    form = UserForm(obj=user)
+
+    if form.validate_on_submit():
+        if not user:
+            user = User()
+            db.session.add(user)
+        
+        for field in form.data:
+            if field != 'csrf_token':
+                setattr(user, field, form.data[field])
+
+        db.session.commit()
+        flash(f"User {'updated' if id else 'added'} successfully!", category="success")
+        return redirect(url_for("users.manage_users"))
+
+    return render_template("admin/users/edit.html", form=form)
+
+# Inline Editing for Users
+@users_bp.route("/admin/users/edit/<int:id>", methods=['POST'])
+@admin_login_required
+def edit_user_inline(id):
+    user = User.query.get_or_404(id)
+
+    for field in request.form:
+        setattr(user, field, request.form[field])
+
+    db.session.commit()
+    return "", 204  # Empty response for inline edit
+
+# Delete User
+@users_bp.route("/admin/users/delete/<int:id>", methods=['POST'])
+@admin_login_required
+def delete_user(id):
+    user = User.query.get_or_404(id)
+    
+    db.session.delete(user)
+    db.session.commit()
+    flash("User deleted successfully!", category="success")
+    return redirect(url_for("users.manage_users"))
+
+
+
+
+
+
+
+
+

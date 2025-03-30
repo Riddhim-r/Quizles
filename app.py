@@ -1,38 +1,38 @@
-import os
 from flask import Flask
 from config import Config
-from models import db, User
-import datetime  
+from models import db, User, setup_database
+from routes import routes_bp, admin_bp
+from commands import register_commands
+from flask_login import LoginManager
+
 
 app = Flask(__name__)
-app.secret_key = "secret"  # Required for session management   
 app.config.from_object(Config)
 db.init_app(app)
 
+#a debug test to see if the app is running 
+#print("DEBUG:", app.config["DEBUG"])
+#print("DB URI:", app.config["SQLALCHEMY_DATABASE_URI"])
+#print("SECRET_KEY:", app.config["SECRET_KEY"])
+
+# ⪼ Initialize Flask-Login
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = "routes.login"  # Redirect unauthorized users
+
+# ⪼ User loader function (Required for Flask-Login)
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
 # ⪼ Import routes and register Blueprint after app is initialized
-from routes import routes_bp, admin_bp
 app.register_blueprint(routes_bp, url_prefix="")  # No prefix ensures root-level routes
 app.register_blueprint(admin_bp)
 
-# ⪼ Create tables and admin user if not exists
-with app.app_context():
-    db.create_all()
-
-    if not User.query.filter_by(username='admin').first():
-        admin_user = User(
-            username='admin',
-            email='admin@example.com',
-            name='Admin',
-            is_admin=True,
-            dob=datetime.date(2000, 1, 1)
-        )
-        admin_user.password = "admin123"
-        db.session.add(admin_user)
-        db.session.commit()
-        print("⪼ Admin user created successfully!")
+# Initialize Database & Create Admin
+setup_database(app)
 
 # ⪼ Register CLI commands
-from commands import register_commands
 register_commands(app)
 
 if __name__ == "__main__":

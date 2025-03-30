@@ -1,117 +1,155 @@
 {% extends 'layout.html' %}
+
 {% block title %}
-   Quizles - Admin Dashboard
+   Quizles - Manage Subjects
 {% endblock %}
+
 {% block style %}
-    <style>
-        body {
-            background-color: #EEFDFF; /* Light blue background */
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            height: 100vh;
-            font-family: 'Comic Sans MS', cursive, sans-serif;;
-        }
-        .header {
-            width: 100%;
-            background-color: #6ea4ad; /* Light blue */
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 20px;
-            height: 15px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-            border: 2.5px solid black; 
-        }
-        .header h3 {
-            font-size: 45px;
-            font-weight: bold;
-            font-family: Irish Grover;
-        }
-        h2{
-            font-weight: bolder;
-            font-style: italic;
-            color: #2E6D76;
-            font-size:35px;
-            text-shadow: 2px 2px 4px black, -2px -2px 4px black;
-        }
-        .container {
-            width: 800px;
-            height: 700px;
-            margin: 40px auto;
-            background-color: #EEFDFF;
-            padding: 30px 40px;
-            border-radius: 45px;
-            border: 4px solid #2E6D76;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            padding: 10px;
-            border: 3px solid #2E6D76;
-            text-align: center;
-        }
-        th {
-            background-color: #6a91a3;
-            font-weight: bold;
-        }
-        .btn {
-            color:  #2E6D76;
-            font-size:30px;
-            text-shadow: 2px 2px 4px black;
-            font-weight: bold;
-            padding: 7px 30px;
-            border-color:  black;
-            cursor: pointer;
-            margin-left: 600px;
-            margin-top: 50px;
-            border-radius: 10px;
-            
-          }
-       
+<style>
+    body {
+        background-color: #EEFDFF;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 100vh;
+        font-family: 'Comic Sans MS', cursive, sans-serif;
+    }
+    .header {
+        width: 100%;
+        background-color: #6ea4ad;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 20px;
+        height: 100px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        border: 2.5px solid black; 
+    }
+    .header h3 {
+        font-size: 80px;
+        font-weight: bold;
+        font-family: Irish Grover;
+        cursor: pointer;
+    }
+    h2 {
+        font-weight: bolder;
+        font-style: italic;
+        color: #2E6D76;
+        font-size: 45px;
+        text-shadow: 2px 2px 4px black;
+    }
+    .container {
+        width: 100%;
+        max-width: 1200px;
+        height: auto;
+        margin: 40px auto;
+        background-color: #EEFDFF;
+        padding: 30px 40px;
+        border-radius: 45px;
+        border: 4px solid #2E6D76;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    th, td {
+        padding: 10px;
+        border: 3px solid #2E6D76;
+        text-align: center;
+    }
+    th {
+        background-color: #6a91a3;
+        font-weight: bold;
+    }
+    .btn {
+        color: #2E6D76;
+        font-size: 30px;
+        text-shadow: 1px 1px 1px black;
+        font-weight: bold;
+        padding: 7px 30px;
+        border-color: black;
+        cursor: pointer;
+        margin-top: 20px;
+        border-radius: 10px;
+    }
+    .edit-btn, .delete-btn {
+        padding: 10px 15px;
+        font-size: 16px;
+        margin: 5px;
+        cursor: pointer;
+        border-radius: 10px;
+    }
+    .edit-btn { background-color: #ffcc00; }
+    .delete-btn { background-color: #ff4444; color: white; }
+</style>
+{% endblock %}
 
-    </style>
-    {% endblock %}
+{% block content %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Irish+Grover&display=swap" rel="stylesheet">
 
-    {% block content %}
+<div class="header">
+    <h3 onclick="location.href='{{ url_for('admin.admin_home') }}'">Quizles</h3>
+</div>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Irish+Grover&display=swap" rel="stylesheet">
+<div class="container">
+    <h2>Manage Subjects</h2>
 
-    
-    <div class="header"><h3>Quizles</h3>
-    </div>
-    
-            <div class="container">
-                <h2>Manage Subject</h2>
-                <table>
-                    <tr>
-                        <th>Subject id</th>
-                        <th>Branch name</th>
-                        <th>Subject name</th>
-                        <th>Action</th>
-                    </tr>
-                    <tr>
-                        <td>1</td><td>EXTC</td><td>EMbeded system</td><td>Edit/Deleat</td>
-                    </tr>
-                    <tr>
-                        <td>2</td><td>CS</td><td>DSA</td><td>Edit/Deleat</td>
-                    </tr>
-                    <tr>
-                        <td>3</td><td>IT</td><td>DBMS</td><td>Edit/Deleat</td>
-                    </tr>
+    <!-- Add or Edit Subject Form -->
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <label>{{ form.name.label }}</label> {{ form.name }}
+        <br>
+        <label>{{ form.branch_id.label }}</label> {{ form.branch_id }}
+        <br>
+        {{ form.submit(class="btn") }}
+    </form>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul>
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+    <h3>Existing Subjects</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Subject Name</th>
+                <th>Branch</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for subject, branch_name in subjects %}
+            <tr>
+                <td>{{ subject.name }}</td>
+                <td>{{ branch_name }}</td>
+                <td>
+                    <!-- Edit Button -->
+                    <a href="{{ url_for('admin.manage_subject', subject_id=subject.id) }}" class="btn edit-btn">Edit</a>
                     
-                    
-                </table>
-                <button class=btn>+Subject</button>
-            </div>
+                    <!-- Delete Button -->
+                    <a href="{{ url_for('admin.manage_subject', delete_subject_id=subject.id) }}" class="btn delete-btn" 
+                       onclick="return confirm('Are you sure you want to delete this subject?')">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
-    {% endblock %}
+    <a href="{{ url_for('admin.admin_home') }}" class="btn btn-secondary">Back to Admin Home</a>
+</div>
+
+{% endblock %}

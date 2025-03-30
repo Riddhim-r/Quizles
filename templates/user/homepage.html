@@ -7,7 +7,7 @@
 {% block style %}
     <style>
         body {
-            background-color: #EEFDFF; /* Light blue background */
+            background-color: #EEFDFF;
             margin: 0;
             padding: 0;
             display: flex;
@@ -17,7 +17,7 @@
         }
         .header {
             width: 100%;
-            background-color: #6ea4ad; /* Light blue */
+            background-color: #6ea4ad;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -43,6 +43,7 @@
             display: flex;
             flex-direction: column;
             gap: 30px;
+            align-items: center;
         }
         .btn {
             background-color: #e0e0e0;
@@ -54,20 +55,21 @@
             font-weight: bold;
             font-style: italic;
             text-transform: uppercase;
-            max-width: 1400px;
+            max-width: 500px;
             height: 80px;
             border-radius: 16px;
             cursor: pointer;
             box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2);
             transition: all 0.2s ease;
+            text-align: center;
         }
         .btn:hover {
             background-color: #d5d5d5;
         }
         h1 {
-            font-family: 'Pacifico', cursive; /* Fun handwritten font */
+            font-family: 'Pacifico', cursive;
             font-size: 40px;
-            color: #143c50; /* Dark blue-green */
+            color: #143c50;
             text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
             border-bottom: 3px solid #336b87;
             padding: 10px;
@@ -86,10 +88,34 @@
             display: inline-block;
             box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.2);
         }
-        .header h3 {
-            font-size: 30px;
+        .dropdown {
+            background-color: #e0e0e0;
+            border: 4px solid #2E6D76;
+            color: #2E6D76;
+            font-family: Inter;
+            padding: 10px;
+            font-size: 43px;
             font-weight: bold;
-            font-family: 'Irish Grover', cursive;
+            font-style: italic;
+            text-transform: uppercase;
+            width: 700px;
+            height: 120px;
+            border-radius: 16px;
+            cursor: pointer;
+            box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2);
+            transition: all 0.2s ease;
+            text-align: center;
+            appearance: none;
+        }
+        .dropdown:hover {
+            background-color:rgb(196, 143, 243);
+        }
+        .form-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            margin-top: 30px;
         }
     </style>
 {% endblock %}
@@ -99,27 +125,29 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Irish+Grover&display=swap" rel="stylesheet">
 
+
     <div class="header">
         <h3>Hello, {{ username }} (˶˃ ᵕ ˂˶) </h3>
-        <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  
-        <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  
-        <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  
-
-        <a href="{{ url_for('admin.admin_dashboard') }}">
+        <a href="{{ url_for('routes.profile') }}">
             <div class="user-icon">𐀪</div>
         </a>
-        <a href="logout">
+        <a href="{{ url_for('routes.index') }}">
             <div class="user-icon">𓉸</div>
         </a>
     </div>
     
-    <h1>Ready to challenge yourself?  😎</h1>
-    <h2>  Pick a quiz & let the fun begin! 🎉 </h2>
+    <h1>Ready to challenge yourself? 😎</h1>
+    <h2>Pick a quiz & let the fun begin! 🎉</h2>
 
-    <!-- Buttons Section -->
-    <div class="container">
-        <button class="btn">Select Subject</button>
-        <button class="btn">Select Quiz</button>
-        <button class="btn">Start Quiz</button>
+    <div class="form-container">
+        <form method="GET" action="{{ url_for('routes.start_quiz', quiz_id=0) }}">
+            <select name="quiz_id" required onchange="this.form.action = '{{ url_for('routes.start_quiz', quiz_id=0) }}'.replace('0', this.value)">
+                <option value="" selected disabled>Select a quiz</option>
+                {% for quiz in quizzes %}
+                    <option value="{{ quiz.id }}">{{ quiz.name }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">Start Quiz</button>
+        </form>               
     </div>
 {% endblock %}

@@ -1,0 +1,135 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+   Search Results - Admin Dashboard
+{% endblock %}
+
+{% block style %}
+    <style>
+        body {
+            background-color: #EEFDFF; /* Consistent background */
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .header {
+            width: 100%;
+            background-color: #6ea4ad;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            border: 2.5px solid black; 
+        }
+
+        h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 30px;
+            font-style: italic;
+            font-weight: bold;
+            color: #2c6975;
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 10px 15px;
+            border-radius: 10px;
+            box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            font-size: 24px;
+            color: #143c50;
+            border-bottom: 2px solid #336b87;
+            padding-bottom: 5px;
+            margin-top: 25px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            background: #E7EDEE;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 5px 0;
+            font-size: 20px;
+            font-weight: bold;
+            color: #2E6D76;
+            text-align: center;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        p {
+            font-size: 22px;
+            color: #d9534f; /* Red for no results */
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        .back-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 20px;
+            font-weight: bold;
+            background-color: #2E6D76;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            background-color: #1a4c56;
+        }
+
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="header">
+        <h2>Search Results for "{{ query }}"</h2>
+    </div>
+
+    {% if user_results %}
+        <h3>Users</h3>
+        <ul>
+            {% for user in user_results %}
+                <li>{{ user.name }} ({{ user.email }})</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% if subject_results %}
+        <h3>Subjects</h3>
+        <ul>
+            {% for subject in subject_results %}
+                <li>{{ subject.name }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% if quiz_results %}
+        <h3>Quizzes</h3>
+        <ul>
+            {% for quiz in quiz_results %}
+                <li>{{ quiz.name }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% if not user_results and not subject_results and not quiz_results %}
+        <p>No results found.</p>
+    {% endif %}
+
+    <a href="javascript:history.back()" class="back-btn">← Back</a>
+
+{% endblock %}

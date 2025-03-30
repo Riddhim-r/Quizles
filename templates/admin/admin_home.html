@@ -112,13 +112,27 @@
             <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  <a>   </a>  
             <a href="{{ url_for('admin.admin_dashboard') }}">
                 <div class="user-icon">𐀪</div>
-                <a href="{{ url_for('routes.logout') }}">
-                <div class="user-icon">𓉸</div>
-            </a>
+              </a>
+              
+              <!-- Logout Form -->
+              <form method="POST" action="{{ url_for('admin.logout') }}">
+                <button type="submit" class="user-icon">
+                  <div class="user-icon"> 𓉸</div>
+                </button>
+              </form>
+              
         </div>
+        
         <h1>Welcome to the Admin Dashboard.</h1>
+        <!-- Admin Search Bar -->
+        <form action="{{ url_for('routes.admin_search') }}" method="GET" style="margin-top: 20px;">
+            <input type="text" name="q" placeholder="Search Users, Subjects, Quizzes" required>
+            <button type="submit">Search</button>
+        </form>
+
         <h2>You can manage everything under Quizles here.</h2>
         
+
     
        <!-- Buttons Section -->
         <div class="container">

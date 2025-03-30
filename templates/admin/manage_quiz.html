@@ -1,120 +1,148 @@
 {% extends 'layout.html' %}
+
 {% block title %}
-   Quizles - Admin Dashboard
+   Quizles - Manage Quizzes
 {% endblock %}
+
 {% block style %}
-    <style>
-        body {
-            background-color: #EEFDFF; /* Light blue background */
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            height: 100vh;
-            font-family: 'Comic Sans MS', cursive, sans-serif;;
-        }
-        .header {
-            width: 100%;
-            background-color: #6ea4ad; /* Light blue */
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 20px;
-            height: 15px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-            border: 2.5px solid black; 
-        }
-        .header h3 {
-            font-size: 45px;
-            font-weight: bold;
-            font-family: Irish Grover;
-        }
-        h2{
-            font-weight: bolder;
-            font-style: italic;
-            color: #2E6D76;
-            font-size:35px;
-            text-shadow: 2px 2px 4px black, -2px -2px 4px black;
-        }
-        .container {
-            width: 800px;
-            height: 700px;
-            margin: 40px auto;
-            background-color: #EEFDFF;
-            padding: 30px 40px;
-            border-radius: 45px;
-            border: 4px solid #2E6D76;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            padding: 10px;
-            border: 3px solid #2E6D76;
-            text-align: center;
-        }
-        th {
-            background-color: #6a91a3;
-            font-weight: bold;
-        }
-        .btn {
-            color:  #2E6D76;
-            font-size:30px;
-            text-shadow: 2px 2px 4px black;
-            font-weight: bold;
-            padding: 7px 30px;
-            border-color:  black;
-            cursor: pointer;
-            margin-left: 600px;
-            margin-top: 50px;
-            border-radius: 10px;
-            
-          }
-       
+<style>
+    body {
+        background-color: #EEFDFF;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-family: 'Comic Sans MS', cursive, sans-serif;
+    }
+    .container {
+        width: 100%;
+        max-width: 1200px;
+        background-color: #EEFDFF;
+        padding: 30px;
+        border-radius: 45px;
+        border: 4px solid #2E6D76;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    th, td {
+        padding: 10px;
+        border: 3px solid #2E6D76;
+        text-align: center;
+    }
+    th {
+        background-color: #6a91a3;
+        font-weight: bold;
+    }
+    .btn {
+        color: white;
+        background-color: #2E6D76;
+        font-weight: bold;
+        padding: 7px 20px;
+        cursor: pointer;
+        border-radius: 10px;
+    }
+    .edit-btn { background-color: #ffcc00; }
+    .delete-btn { background-color: #ff4444; color: white; }
+</style>
+{% endblock %}
 
-    </style>
-    {% endblock %}
+{% block content %}
+<div class="header">
+    <h3 onclick="location.href='{{ url_for('admin.admin_home') }}'">Quizles</h3>
+</div>
 
-    {% block content %}
+<div class="container">
+    <h2>Manage Quizzes</h2>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Irish+Grover&display=swap" rel="stylesheet">
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <div>
+            <label>Quiz Name</label>
+            <input type="text" name="new_name" required>
+        </div>
+        <div>
+            <label>Chapter</label>
+            <select name="new_chapter_id" required>
+                <option value="">Select a Chapter</option>
+                {% for chapter in chapters %}
+                    <option value="{{ chapter.id }}">{{ chapter.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label>No. of Questions</label>
+            <input type="number" name="new_nos" required>
+        </div>
+        <div>
+            <label>Time (s)</label>
+            <input type="number" name="new_time" required>
+        </div>
+        <button type="submit" name="add" class="btn add-btn">+ Add Quiz</button>
+    </form>
 
+    <table>
+        <thead>
+            <tr>
+                <th>Quiz Name</th>
+                <th>Chapter</th>
+                <th>No. of Questions</th>
+                <th>Time (secs)</th>
+                <th>Created On</th>  <!-- Added Created On Column -->
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for quiz in quizzes %}
+            <tr id="quiz_row_{{ quiz.id }}">
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+                    <td>
+                        <span id="name_display_{{ quiz.id }}">{{ quiz.name }}</span>
+                        <input type="text" name="name_{{ quiz.id }}" value="{{ quiz.name }}" class="edit-field hidden">
+                    </td>
+                    <td>{{ quiz.chapter_name }}</td>
+                    <td>
+                        <span id="nos_display_{{ quiz.id }}">{{ quiz.nos }}</span>
+                        <input type="number" name="nos_{{ quiz.id }}" value="{{ quiz.nos }}" class="edit-field hidden">
+                    </td>
+                    <td>
+                        <span id="time_display_{{ quiz.id }}">{{ quiz.time }}</span>
+                        <input type="number" name="time_{{ quiz.id }}" value="{{ quiz.time }}" class="edit-field hidden">
+                    </td>
+                    <td>
+                        <span>{{ quiz.created_at.strftime('%Y-%m-%d') }}</span>  <!-- Formatted Date -->
+                    </td>
+                    <td>
+                        <button type="button" class="btn edit-btn" onclick="enableEdit({{ quiz.id }})" id="edit_btn_{{ quiz.id }}">Edit</button>
+                        <button type="submit" name="edit" value="{{ quiz.id }}" class="btn save-btn hidden" id="save_btn_{{ quiz.id }}">Save</button>
+                        <button type="submit" name="delete" value="{{ quiz.id }}" class="btn delete-btn" id="delete_btn_{{ quiz.id }}" onclick="return confirm('Are you sure?')">Delete</button>
+                    </td>
+                </form>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
     
-    <div class="header"><h3>Quizles</h3>
-    </div>
-    
-            <div class="container">
-                <h2>Manage Quiz</h2>
-                <table>
-                    <tr>
-                        <th>Quiz id</th>
-                        <th>Branch name</th>
-                        <th>Subject name</th>
-                        <th>Quiz name</th>
-                        <th>Time duration</th>
+</div>
 
-                        <th>Action</th>
-                    </tr>
-                    <tr>
-                        <td>1</td><td>EXTC</td><td>EMbeded system</td><td></td><td></td><td>Edit/Deleat</td>
-                    </tr>
-                    <tr>
-                        <td>2</td><td>CS</td><td>DSA</td><td></td><td></td><td>Edit/Deleat</td>
-                    </tr>
-                    <tr>
-                        <td>3</td><td>IT</td><td>DBMS</td><td></td><td></td><td>Edit/Deleat</td>
-                    </tr>
-                    
-                    
-                </table>
-                <button class=btn>+Quiz</button>
-            </div>
+<script>
+    function enableEdit(quizId) {
+        document.querySelectorAll(`#quiz_row_${quizId} .edit-field`).forEach(field => field.classList.remove('hidden'));
+        document.querySelectorAll(`#quiz_row_${quizId} span`).forEach(span => span.classList.add('hidden'));
 
-    {% endblock %}
+        document.getElementById(`edit_btn_${quizId}`).classList.add('hidden');
+        document.getElementById(`delete_btn_${quizId}`).classList.add('hidden');
+        document.getElementById(`save_btn_${quizId}`).classList.remove('hidden');
+    }
+</script>
+
+<style>
+    .hidden {
+        display: none;
+    }
+</style>
+<a href="{{ url_for('admin.admin_home') }}" class="btn btn-secondary">Back to Admin Home</a>
+{% endblock %}

@@ -1,78 +1,186 @@
-{% extends 'layout.html' %}
 {% block title %}
-   Quizles
+   Quizles - Quiz Attempt
 {% endblock %}
+
 {% block style %}
-    <style>
-        body {
-            background-color: #EEFDFF; /* Light blue background */
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            height: 100vh;
-        }
-        .header {
-            width: 100%;
-            background-color: #EEFDFF; /* Light blue */
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 20px;
-            height: 20px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-            border: 2.5px solid black; 
-            gap: 2px;
-        }
-        .timer {
-            font-size: 27px;
-            font-weight: bold;
-            font-family: Irish grover;
-            row-gap: 2px;
-        }
-        .timer p{
-            font-family: Arial, Helvetica, sans-serif;
-            font-size: 22px;
-            gap: 2px;
-        }
-        .menu{
-            
-            border: 5px black;
-           
-        }
+<style>
+    body {
+        background-color: #EEFDFF; 
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-family: Arial, sans-serif;
+    }
+    .header {
+        width: 100%;
+        background-color: #EEFDFF;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 20px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        border-bottom: 2.5px solid black;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+    }
+    .timer {
+        font-size: 22px;
+        font-weight: bold;
+        font-family: 'Irish Grover', cursive;
+    }
+    .menu {
+        font-size: 24px;
+        cursor: pointer;
+    }
+    .quiz-container {
+        width: 80%;
+        max-width: 800px;
+        margin-top: 80px; /* Offset for fixed header */
+        padding: 20px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .question {
+        margin-bottom: 20px;
+        padding: 15px;
+        border: 2px solid black;
+        border-radius: 10px;
+        background-color: #f9f9f9;
+    }
+    .options button {
+        display: block;
+        width: 100%;
+        text-align: left;
+        padding: 10px;
+        margin: 5px 0;
+        border: 2px solid black;
+        border-radius: 5px;
+        background: white;
+        cursor: pointer;
+        font-size: 16px;
+    }
+    .options button:hover {
+        background: lightgray;
+    }
+    .buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 15px;
+    }
+    .buttons button {
+        flex: 1;
+        padding: 10px;
+        margin: 5px;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    .progress-tracker {
+        position: fixed;
+        right: 10px;
+        top: 80px;
+        width: 50px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .progress-tracker button {
+        width: 40px;
+        height: 40px;
+        margin: 5px 0;
+        font-size: 16px;
+        border-radius: 50%;
+        border: 2px solid black;
+        background: white;
+        cursor: pointer;
+    }
+    .progress-tracker button.completed {
+        background: lightgreen;
+    }
+</style>
+{% endblock %}
 
-    </style>
-    {% endblock %}
-
-    {% block content %}
-    <link rel="preconnect" href="https://fonts.googleapis.com">
+{% block content %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Irish+Grover&display=swap" rel="stylesheet">
 
 <div class="header">
-    <div class="timer">⏸ Time left <b>00 : 10 : 00</b>
-    <p><b>EXTC - Embedded System</b></p></div>
+    <div class="timer" id="timer">⏳ Time left: Loading...</div>
     <div class="menu">☰</div>
 </div>
-<p><b>EXTC - Embedded System</b></p>
-<hr>
-<div class="question">
-    <p><b>Question NO.1</b></p>
-    <p>hbk3dgwhk3iy ...........................................</p>
-</div>
-<div class="options">
-    <button>1.</button>
-    <button>2.</button>
-    <button>3.</button>
-    <button>4.</button>
-</div>
-<div class="buttons">
-    <button>Mark & Next</button>
-    <button>Clear</button>
-    <button>Save & Next</button>
+
+<div class="quiz-container">
+    <h2>Quiz: <b>{{ quiz.name }}</b></h2>
+    <hr>
+
+    <form id="quizForm" action="{{ url_for('routes.quiz', quiz_id=quiz.id) }}" method="POST">
+        <input type="hidden" id="start_time" name="start_time"> <!-- Hidden input for start time -->
+
+        {% for question in questions %}
+        <div class="question">
+            <p><b>Question {{ loop.index }}:</b> {{ question.question_text }}</p>
+            <div class="options">
+                <label>
+                    <input type="radio" name="question_{{ question.id }}" value="1">
+                    {{ question.option1 }}
+                </label><br>
+                <label>
+                    <input type="radio" name="question_{{ question.id }}" value="2">
+                    {{ question.option2 }}
+                </label><br>
+                <label>
+                    <input type="radio" name="question_{{ question.id }}" value="3">
+                    {{ question.option3 }}
+                </label><br>
+                <label>
+                    <input type="radio" name="question_{{ question.id }}" value="4">
+                    {{ question.option4 }}
+                </label><br>
+            </div>
+        </div>
+        {% endfor %}
+        
+        <div class="buttons">
+            <button type="reset">Clear</button>
+            <button type="submit" style="background-color: lightgreen;">Submit Quiz</button>
+        </div>
+    </form>
 </div>
 
+<script>
+    let timeLeft = {{ quiz.time }}; // Quiz duration in seconds
 
+    function updateTimer() {
+        let minutes = Math.floor(timeLeft / 60);
+        let seconds = timeLeft % 60;
+        document.getElementById("timer").innerHTML = `⏳ Time left: ${String(minutes).padStart(2, '0')} : ${String(seconds).padStart(2, '0')}`;
 
-    {% endblock %}
+        if (timeLeft <= 0) {
+            document.getElementById("quizForm").submit(); // Auto-submit on timeout
+        } else {
+            timeLeft--;
+            setTimeout(updateTimer, 1000);
+        }
+    }
+
+    window.onload = function() {
+        document.getElementById("start_time").value = Math.floor(Date.now() / 1000); // Store start time
+        updateTimer();
+    };
+</script>
+
+<script>
+    document.getElementById("quizForm").onsubmit = function(event) {
+        event.preventDefault(); // Prevent default refresh
+        this.submit(); // Submit the form properly
+    };
+</script>
+
+{% endblock %}
+

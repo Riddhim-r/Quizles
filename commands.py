@@ -1,3 +1,4 @@
+# This file contains the custom commands that can be run using the Flask CLI.
 import click
 from flask import Flask
 from flask.cli import with_appcontext
@@ -8,7 +9,7 @@ app = Flask(__name__)
 @click.command('seed_branches')
 @with_appcontext
 def seed_branches():
-    """Seed the database with default branches."""
+    #Seed the database with default branches.
     branches = [
         {"name": "Electronics and Telecommunication", "desc": "ETC Branch"},
         {"name": "Information Technology", "desc": "IT Branch"},

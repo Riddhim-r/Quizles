@@ -1,0 +1,83 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+   Quiz Completed!
+{% endblock %}
+
+{% block style %}
+<style>
+    body {
+        background-color: #EEFDFF;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 100vh;
+        font-family: 'Comic Sans MS', cursive, sans-serif;
+    }
+    .container {
+        width: 100%;
+        max-width: 600px;
+        background: white;
+        border-radius: 45px;
+        box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        padding: 30px;
+        border: 4px solid #2E6D76;
+    }
+    .header {
+        background: #6ea4ad;
+        color: white;
+        padding: 20px;
+        font-size: 32px;
+        border-top-left-radius: 45px;
+        border-top-right-radius: 45px;
+        font-family: 'Irish Grover', cursive;
+    }
+    .details {
+        margin-top: 20px;
+        font-size: 24px;
+        font-weight: bold;
+        color: #2E6D76;
+    }
+    .score {
+        font-size: 28px;
+        font-weight: bold;
+        color: #28a745;
+        margin-top: 10px;
+    }
+    .btn-home {
+        display: inline-block;
+        margin-top: 30px;
+        padding: 12px 40px;
+        background: #ffcc00;
+        color: black;
+        text-decoration: none;
+        font-size: 22px;
+        font-weight: bold;
+        border-radius: 10px;
+        border: 3px solid black;
+        cursor: pointer;
+    }
+    .btn-home:hover {
+        background: #ffdd33;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="header">
+            <h3>Quiz Completed! 🎉</h3>
+        </div>
+        <div class="details">
+            <p><strong>Your Score:</strong></p>
+            <p class="score">{{ score }}/{{ total_questions }}</p>
+
+            <form action="{{ url_for('routes.homepage') }}" method="GET">
+                <button type="submit" class="btn-home">Back to Homepage</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

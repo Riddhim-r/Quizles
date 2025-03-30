@@ -1,0 +1,254 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+   Admin Profile
+{% endblock %}
+
+{% block style %}
+    <style>
+        body {
+            background-color: #EEFDFF; /* Light blue background */
+            margin-top: 30px; 
+            margin: 100;
+            padding: 100;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+        }
+        .header {
+            width: 100%;
+            background-color: #6ea4ad;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 25px 30px;
+            height: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            border: 2.5px solid black; 
+        }
+        .header h3 {
+            font-size: 45px;
+            font-weight: bold;
+            font-family: 'Irish Grover', cursive;
+            cursor: pointer;
+        }
+        .sidebar {
+            width: 400px;
+            height: 550px;
+            background: #E7EDEE;
+            padding: 40px;
+            border: 2px solid black;
+            margin-right: 990px;
+            margin-top: 30px;
+        }
+        .profile-pic {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+        .profile-pic img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: lightgray;
+        }
+        .profile-pic p {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .edit-profile {
+            margin-top: 30px;
+            padding: 20px;
+            width: 60%;
+            background: #91D2C0;
+            border: 2px solid black;
+            text-align: center;
+            cursor: pointer;
+            font-size: 20px;
+            border-radius: 10px;
+            font-weight: light;
+            font-family: 'Sansita', sans-serif;
+        }
+        .edit-profile:hover {
+            background: #90b290;
+        }
+        .personal-details {
+            margin-top: 20px;
+            padding: 30px;
+            background: #D9D9D9;
+            border-radius: 10px;
+            font-family: 'Sansita', sans-serif;
+            font-size: 22px;
+        }
+        .personal-details p {
+            font-size: 18px;
+            margin: 80px 0;
+        }
+        .logout-btn {
+            margin-top: 20px;
+            padding: 20px;
+            width: 200px;
+            background: #d1d1d1;
+            border: none;
+            border-radius: 8px;
+            font-size: 22px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .logout-btn:hover {
+            background: #bfbfbf;
+        }
+        .main-content {
+            width:900px;
+            padding: 10px;
+            margin-left: 500px;
+            margin-top: -400px;
+            height: 400px;
+        }
+        .summary-container {
+            display: flex;
+            justify-content: space-around;
+            padding: 5px;
+            background: #e8f7fc;
+            border-radius: 10px;
+            border: 2px solid black;
+        }
+        .summary-box {
+            text-align: center;
+            width: 45%;
+        }
+        .summary-box h3 {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+        .summary-box p {
+            font-size: 22px;
+            font-weight: bold;
+        }
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            .sidebar, .main-content {
+                width: 100%;
+            }
+            .summary-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            .summary-box {
+                width: 100%;
+                margin-bottom: 20px;
+            }
+        }
+        .back-button {
+            display: inline-block;
+            transform: scale(2); /* Increase size */
+            margin-top: 30px;
+        }        
+
+        .chart-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: -500px; /* Move charts up */
+        }
+
+        canvas {
+            max-width: 300px; /* Decrease chart size */
+            max-height: 250px;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="header">
+        <h3 onclick="location.href='{{ url_for('admin.admin_dashboard') }}'">Admin Profile</h3>
+    </div>
+
+    <div class="back-button">
+        <a href="javascript:history.back()">ᯓ ✈︎𖠿</a>
+    </div>
+    
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="profile-pic">
+            <img src="{{ current_user.profile_pic or 'https://i.pinimg.com/736x/0a/4d/b5/0a4db5df5c39bb429c808f0c253ee5d8.jpg' }}" alt="Profile">
+            <p>{{ name }}</p>
+        </div>
+        
+        <div class="personal-details">
+            <h3>Admin Details</h3>
+            <p>📧 admin@quizles.com</p>
+        </div>
+
+        <form action="{{ url_for('admin.logout') }}" method="post" style="display:inline;">
+            <button type="submit" class="logout-btn">Log out</button>
+        </form>
+    </div>
+
+    <div class="chart-container">
+        <!-- Bar Chart (Users Count per Branch) -->
+        <h3>Users Count per Branch</h3>
+        <canvas id="usersBarChart"></canvas>
+
+        <!-- Pie Chart (Total Quizzes Created per Branch) -->
+        <h3>Total Quizzes Created per Branch</h3>
+        <canvas id="quizzesPieChart"></canvas>
+    </div>
+
+   <!-- Include Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    // Convert Flask data into JavaScript variables
+    var branchUsers = {{ branch_users | tojson }};
+    var branchQuizzes = {{ branch_quizzes | tojson }};
+
+    document.addEventListener("DOMContentLoaded", function () {
+        // Get canvas elements
+        var ctxBar = document.getElementById('usersBarChart').getContext('2d');
+        var ctxPie = document.getElementById('quizzesPieChart').getContext('2d');
+
+        // Bar Chart - Users Count per Branch
+        new Chart(ctxBar, {
+            type: 'bar',
+            data: {
+                labels: branchUsers.map(row => row.branch),  
+                datasets: [{
+                    label: 'Users Count per Branch',
+                    data: branchUsers.map(row => row.count),
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false, // Allows resizing
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+
+        // Pie Chart - Total Quizzes Created per Branch
+        new Chart(ctxPie, {
+            type: 'pie',
+            data: {
+                labels: branchQuizzes.map(row => row.branch),
+                datasets: [{
+                    data: branchQuizzes.map(row => row.count),
+                    backgroundColor: ['red', 'blue', 'green', 'yellow', 'purple', 'orange']
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+    });
+</script>    
+
+{% endblock %}

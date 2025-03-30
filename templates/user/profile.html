@@ -1,0 +1,258 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+   User Profile
+{% endblock %}
+
+{% block style %}
+    <style>
+        body {
+            background-color: #EEFDFF; 
+            margin-top: 30px; 
+            padding: 100;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+        }
+        .header {
+            width: 100%;
+            background-color: #6ea4ad;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 25px 30px;
+            height: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            border: 2.5px solid black; 
+        }
+        .header h3 {
+            font-size: 45px;
+            font-weight: bold;
+            font-family: 'Irish Grover', cursive;
+            cursor: pointer;
+        }
+
+        /* Main container to align all sections in a row */
+        .profile-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            width: 90%;
+            max-width: 1200px;
+            margin-top: 30px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 25%;
+            min-width: 250px;
+            background-color: #f4f4f4;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .profile-pic {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+        .profile-pic img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: lightgray;
+        }
+        .profile-pic p {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .personal-details {
+            margin-top: 20px;
+            padding: 30px;
+            background: #D9D9D9;
+            border-radius: 10px;
+            font-family: 'Sansita', sans-serif;
+            font-size: 22px;
+        }
+        .personal-details p {
+            font-size: 18px;
+            margin: 80px 0;
+        }
+        .logout-btn {
+            margin-top: 20px;
+            padding: 20px;
+            width: 200px;
+            background: #d1d1d1;
+            border: none;
+            border-radius: 8px;
+            font-size: 22px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .logout-btn:hover {
+            background: #bfbfbf;
+        }
+
+        /* Chart section */
+        .chart-container {
+            width: 45%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        canvas {
+            max-width: 300px; 
+            max-height: 250px;
+        }
+
+        /* Quizzes Attempted box */
+        .quizzes-box {
+            width: 25%;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Quizzes Table Styling */
+        .quizzes-box table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .quizzes-box th, .quizzes-box td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        .quizzes-box th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        .quizzes-box tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .back-button {
+            display: inline-block;
+            transform: scale(2); 
+            margin-top: 30px;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="header">
+        <h3 onclick="location.href='{{ url_for('routes.profile') }}'">User Profile</h3>
+    </div>
+
+    <div class="back-button">
+        <a href="javascript:history.back()">ᯓ ✈︎𖠿</a>
+    </div>
+
+    <!-- Main Profile Content -->
+    <div class="profile-content">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="profile-pic">
+                <img src="{{ current_user.profile_pic or 'https://i.pinimg.com/736x/0a/4d/b5/0a4db5df5c39bb429c808f0c253ee5d8.jpg' }}" alt="Profile">
+                <p>{{ current_user.name }}</p>
+            </div>
+            
+            <div class="personal-details">
+                <h3>User Details</h3>
+                <p>📧 {{ current_user.email }}</p>
+            </div>
+
+            <form action="{{ url_for('routes.logout') }}" method="post" style="display:inline;">
+                <button type="submit" class="logout-btn">Log out</button>
+            </form>
+        </div>
+
+        <!-- Chart Section -->
+        <div class="chart-container">
+            <h3>Top-Scoring Subject</h3>
+            <canvas id="topScoresBarChart"></canvas>
+
+            <h3>Correct vs Wrong Questions</h3>
+            <canvas id="correctAttemptsPieChart"></canvas>
+        </div>
+
+        <!-- Quizzes Attempted Table -->
+        <div class="quizzes-box">
+            <h3>Quizzes Attempted</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Quiz Name</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for quiz in quiz_attempts %}
+                    <tr>
+                        <td>{{ quiz.quiz_name }}</td>
+                        <td>{{ quiz.score }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Include Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        // Convert Flask data into JavaScript variables
+        var topScoresData = {{ subject_scores | tojson }};  // Subject scores array
+        var correctAttemptsData = {{ correct_wrong_attempts | tojson }};  // Correct vs wrong attempts data
+
+        document.addEventListener("DOMContentLoaded", function () {
+            // Get canvas elements
+            var ctxBar = document.getElementById('topScoresBarChart').getContext('2d');
+            var ctxPie = document.getElementById('correctAttemptsPieChart').getContext('2d');
+
+            // Since we only want the top 1 subject, no need to slice, just use the first element
+            topScoresData = topScoresData.slice(0, 1);  // Only the top 1 subject
+
+            // Bar Chart - Top Scoring Subject (Only 1 subject)
+            new Chart(ctxBar, {
+                type: 'bar',
+                data: {
+                    labels: topScoresData.map(row => row.subject),  // Display the subject name
+                    datasets: [{
+                        label: 'Top Score',
+                        data: topScoresData.map(row => row.score),  // Display the score
+                        backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+
+            // Pie Chart - Correct vs Wrong Questions
+            new Chart(ctxPie, {
+                type: 'pie',
+                data: {
+                    labels: ['Correct', 'Wrong'],
+                    datasets: [{
+                        data: [correctAttemptsData.correct, correctAttemptsData.wrong],
+                        backgroundColor: ['green', 'red']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        });
+    </script>
+
+{% endblock %}

@@ -1,40 +1,48 @@
+from datetime import datetime, timezone
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
-from datetime import datetime
+from flask_login import UserMixin
 
 db = SQLAlchemy()
 
-from flask_sqlalchemy import SQLAlchemy
-from werkzeug.security import generate_password_hash, check_password_hash
+def create_admin():
+    #Ensures that at least one admin exists in the database. Automatically create one if not.
+    admin = User.query.filter_by(username='admin').first()
+    if not admin:
+        admin = User(
+        username='admin',
+        email='admin@quizles.com',
+        name='Admin',
+        is_admin=True,
+        password_hash=generate_password_hash("admin123"),  # Default password
+        branch_id=1  # Assign Branch ID 1
+    )
+    db.session.add(admin)
+    db.session.commit()
 
-db = SQLAlchemy()
 
-class User(db.Model):
-    __tablename__ = 'user'
+def setup_database(app):
+    #Initialize the database and create admin if missing.
+    with app.app_context():
+        db.create_all()  # Create tables if they don't exist
+        create_admin()  # Ensure admin exists
+
+class User(db.Model, UserMixin): 
+    __tablename__ = "user"
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(50), unique=True, nullable=False)
-    email = db.Column(db.String(100), unique=True, nullable=False)
-    passhash = db.Column(db.String(200), nullable=False)  # ⪼ Keep only this for passwords
-    name = db.Column(db.String(50), nullable=False)
-    dob = db.Column(db.Date, nullable=False)
-    is_admin = db.Column(db.Boolean, nullable=False, default=False)
-    branch_id = db.Column(db.Integer, db.ForeignKey('branch.id'), nullable=True)
-    scores = db.relationship('Scores', backref='user', lazy=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    password_hash = db.Column(db.String(128), nullable=False)
+    name = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    is_admin = db.Column(db.Boolean, default=False)
+    
+    branch_id = db.Column(db.Integer, db.ForeignKey('branch.id'), nullable=False) 
 
-    @property
-    def password(self):
-        raise AttributeError('Password is not a readable attribute')
-
-    @password.setter
-    def password(self, password):
-        """Hash the password before storing it."""
-        self.passhash = generate_password_hash(password)  # ⪼ Save hash in passhash
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
 
     def check_password(self, password):
-        """Verify the password."""
-        return check_password_hash(self.passhash, password)  # ⪼ Use passhash
-
-
+        return check_password_hash(self.password_hash, password)
 
 class Branch(db.Model):
     __tablename__ = 'branch'
@@ -44,55 +52,58 @@ class Branch(db.Model):
     users = db.relationship('User', backref='branch', lazy=True)
     subjects = db.relationship('Subject', backref='branch', lazy=True)
 
-
 class Subject(db.Model):
     __tablename__ = 'subject'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), unique=True, nullable=False)
-    branch_id = db.Column(db.Integer, db.ForeignKey('branch.id'), nullable=True)
+    branch_id = db.Column(db.Integer, db.ForeignKey('branch.id'), nullable=False)
 
-    chapters = db.relationship('Chapters', backref='subject', lazy=True)
+    # Relationships
+    chapters = db.relationship('Chapter', back_populates='subject', lazy=True) 
     quizzes = db.relationship('Quiz', backref='subject', lazy=True)
 
-
-class Chapters(db.Model):
-    __tablename__ = 'chapters'
+class Chapter(db.Model):
+    __tablename__ = 'chapter'
     id = db.Column(db.Integer, primary_key=True)
-    sub_id = db.Column(db.Integer, db.ForeignKey('subject.id'), nullable=False)
     name = db.Column(db.String(50), unique=True, nullable=False)
+    subject_id = db.Column(db.Integer, db.ForeignKey('subject.id'), nullable=False)
 
-    quiz = db.relationship('Quiz', backref='chapter', lazy=True)
-
+    # Relationship
+    subject = db.relationship('Subject', back_populates='chapters')
+    quizzes = db.relationship('Quiz', backref='chapter', lazy=True)
 
 class Quiz(db.Model):
     __tablename__ = 'quiz'
     id = db.Column(db.Integer, primary_key=True)
-    chap_id = db.Column(db.Integer, db.ForeignKey('chapters.id'), nullable=False)
-    subject_id = db.Column(db.Integer, db.ForeignKey('subject.id'), nullable=True)
+    chapter_id = db.Column(db.Integer, db.ForeignKey('chapter.id'), nullable=False)  
+    subject_id = db.Column(db.Integer, db.ForeignKey('subject.id'), nullable=False)
     name = db.Column(db.String(50), unique=True, nullable=False)
     nos = db.Column(db.Integer, nullable=False)
     time = db.Column(db.Integer, nullable=False)
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
 
-    questions = db.relationship('Questions', backref='quiz', lazy=True)
-    scores = db.relationship('Scores', backref='quiz', lazy=True)
+    # Relationships
+    questions = db.relationship('Question', backref='quiz', lazy=True)
+    scores = db.relationship('Score', backref='quiz', lazy=True)
 
-
-class Questions(db.Model):
-    __tablename__ = 'questions'
+class Question(db.Model):
+    __tablename__ = 'question'
     id = db.Column(db.Integer, primary_key=True)
     quiz_id = db.Column(db.Integer, db.ForeignKey('quiz.id'), nullable=False)
-    question = db.Column(db.String(500), nullable=False)
+    question_text = db.Column(db.String(500), nullable=False)
     option1 = db.Column(db.String(100), nullable=False)
     option2 = db.Column(db.String(100), nullable=False)
     option3 = db.Column(db.String(100), nullable=False)
     option4 = db.Column(db.String(100), nullable=False)
-    ans = db.Column(db.String(100), nullable=False)
+    ans = db.Column(db.Integer, nullable=False)  #  store option number (1-4)
     marks = db.Column(db.Integer, nullable=False)
 
-
-class Scores(db.Model):
-    __tablename__ = 'scores'
+class Score(db.Model):
+    __tablename__ = 'score'
     id = db.Column(db.Integer, primary_key=True)
     quiz_id = db.Column(db.Integer, db.ForeignKey('quiz.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     score = db.Column(db.Integer, nullable=False)
+    
+    # Relationships
+    user = db.relationship('User', backref='scores', lazy=True)

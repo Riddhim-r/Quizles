@@ -1,119 +1,169 @@
 {% extends 'layout.html' %}
+
 {% block title %}
-   Quizles - Admin Dashboard
+   Quizles - Manage Questions
 {% endblock %}
+
 {% block style %}
-    <style>
-        body {
-            background-color: #EEFDFF; /* Light blue background */
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            height: 100vh;
-            font-family: 'Comic Sans MS', cursive, sans-serif;;
-        }
-        .header {
-            width: 100%;
-            background-color: #6ea4ad; /* Light blue */
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 20px;
-            height: 15px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-            border: 2.5px solid black; 
-        }
-        .header h3 {
-            font-size: 45px;
-            font-weight: bold;
-            font-family: Irish Grover;
-        }
-        h2{
-            font-weight: bolder;
-            font-style: italic;
-            color: #2E6D76;
-            font-size:35px;
-            text-shadow: 2px 2px 4px black, -2px -2px 4px black;
-        }
-        .container {
-            width: 800px;
-            height: 700px;
-            margin: 40px auto;
-            background-color: #EEFDFF;
-            padding: 30px 40px;
-            border-radius: 45px;
-            border: 4px solid #2E6D76;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            padding: 10px;
-            border: 3px solid #2E6D76;
-            text-align: center;
-        }
-        th {
-            background-color: #6a91a3;
-            font-weight: bold;
-        }
-        .btn {
-            color:  #2E6D76;
-            font-size:30px;
-            text-shadow: 2px 2px 4px black;
-            font-weight: bold;
-            padding: 7px 30px;
-            border-color:  black;
-            cursor: pointer;
-            margin-left: 600px;
-            margin-top: 50px;
-            border-radius: 10px;
-            
-          }
-       
+<style>
+    body {
+        background-color: #EEFDFF;
+        font-family: 'Comic Sans MS', cursive, sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        padding: 0;
+    }
+    .header {
+        width: 100%;
+        background-color: #6ea4ad;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 20px;
+        height: 100px;
+        border: 2.5px solid black;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .header h3 {
+        font-size: 80px;
+        font-weight: bold;
+        font-family: 'Irish Grover', cursive;
+        cursor: pointer;
+    }
+    h2 {
+        font-weight: bolder;
+        font-style: italic;
+        color: #2E6D76;
+        font-size: 45px;
+        text-shadow: 2px 2px 4px black;
+    }
+    .container {
+        width: 100%;
+        max-width: 1200px;
+        margin: 40px auto;
+        background-color: #EEFDFF;
+        padding: 30px 40px;
+        border-radius: 45px;
+        border: 4px solid #2E6D76;
+        text-align: center;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    th, td {
+        padding: 10px;
+        border: 3px solid #2E6D76;
+        text-align: center;
+    }
+    th {
+        background-color: #6a91a3;
+        font-weight: bold;
+    }
+    .btn {
+        padding: 7px 15px;
+        font-size: 16px;
+        cursor: pointer;
+        margin-top: 10px;
+        border-radius: 5px;
+        border: 2px solid black;
+    }
+    .edit-btn { background-color: #ffcc00; }
+    .delete-btn { background-color: #ff4444; color: white; }
+</style>
+{% endblock %}
 
-    </style>
-    {% endblock %}
+{% block content %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Irish+Grover&display=swap" rel="stylesheet">
 
-    {% block content %}
+<div class="header">
+    <h3 onclick="location.href='{{ url_for('admin.admin_home') }}'">Quizles</h3>
+</div>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Irish+Grover&display=swap" rel="stylesheet">
+<div class="container">
+    <h2>Manage Questions</h2>
 
-    
-    <div class="header"><h3>Quizles</h3>
-    </div>
-    
-            <div class="container">
-                <h2>Manage Questions</h2>
-                <table>
-                    <tr>
-                        <th>Que id</th>
-                        <th>Branch name</th>
-                        <th>Subject name</th>
-                        <th>Quiz name</th>
-                        <th>Questions</th>
-                        <th>Action</th>
-                    </tr>
-                    <tr>
-                        <td>1</td><td>EXTC</td><td>EMbeded system</td><td></td><td></td><td>Edit/Deleat</td>
-                    </tr>
-                    <tr>
-                        <td>2</td><td>CS</td><td>DSA</td><td></td><td></td><td>Edit/Deleat</td>
-                    </tr>
-                    <tr>
-                        <td>3</td><td>IT</td><td>DBMS</td><td></td><td></td><td>Edit/Deleat</td>
-                    </tr>
-                    
-                    
-                </table>
-                <button class=btn>+Questions</button>
-            </div>
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul>
+          {% for category, message in messages %}
+            <li class="{{ category }}">{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
 
-    {% endblock %}
+    <!-- Form for Adding/Editing Questions -->
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <input type="hidden" name="edit_question_id" value="{{ edit_question.id if edit_question else '' }}">
+        <input type="hidden" name="action" value="{{ 'edit' if edit_question else 'add' }}">
+        
+        <label>Quiz Name</label> {{ form.quiz_id }}
+        <br>
+        <label>Question Text</label> {{ form.question_text }}
+        <br>
+        <label>Option 1</label> {{ form.option1 }}
+        <br>
+        <label>Option 2</label> {{ form.option2 }}
+        <br>
+        <label>Option 3</label> {{ form.option3 }}
+        <br>
+        <label>Option 4</label> {{ form.option4 }}
+        <br>
+        <label>Correct Answer</label> {{ form.correct_option }}
+        <br>
+        <label>Marks</label> {{ form.marks }}
+        <br>
+        {{ form.submit(class="btn") }}
+    </form>
+
+    <hr>
+
+    <h3>Questions List</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Quiz Name</th>
+                <th>Question</th>
+                <th>Option 1</th>
+                <th>Option 2</th>
+                <th>Option 3</th>
+                <th>Option 4</th>
+                <th>Correct Answer</th>
+                <th>Marks</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for question in questions %}
+            <tr>
+                <td>{{ question.quiz_name }}</td>
+                <td>{{ question.question_text }}</td>
+                <td>{{ question.option1 }}</td>
+                <td>{{ question.option2 }}</td>
+                <td>{{ question.option3 }}</td>
+                <td>{{ question.option4 }}</td>
+                <td>{{ question.correct_option }}</td>
+                <td>{{ question.marks }}</td>
+                <td>
+                    <a href="{{ url_for('admin.manage_question', edit_id=question.id) }}" class="btn edit-btn">Edit</a>
+                    <form method="POST" style="display:inline;">
+                        <input type="hidden" name="action" value="delete">
+                        <input type="hidden" name="question_id" value="{{ question.id }}">
+                        <button type="submit" class="btn delete-btn">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{{ url_for('admin.admin_home') }}" class="btn" style="color: #2E6D76; font-size: 30px; text-shadow: 1px 1px 1px black; font-weight: bold; padding: 7px 30px; border-color: black; cursor: pointer; margin-top: 20px; border-radius: 10px;">Back to Admin Home</a>
+</div>
+{% endblock %}
