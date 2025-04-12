@@ -1,6 +1,6 @@
-# Quiz Master V1 🎓📝
+# Quizles V1 🎓📝
 
-**Quiz Master V1** is a Flask-based multi-user quiz management and exam preparation web application. It supports an admin (Quiz Master) who manages subjects, chapters, quizzes, and users, and users who register, attempt quizzes, and track their scores.
+**Quizles V1** is a Flask-based multi-user quiz management and exam preparation web application. It supports an admin (Quiz Master) who manages subjects, chapters, quizzes, and users, and users who register, attempt quizzes, and track their scores.
 
 ---
 
