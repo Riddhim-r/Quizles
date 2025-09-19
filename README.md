@@ -73,3 +73,6 @@ python main.py
 Open your browser and navigate to `http://127.0.0.1:5000`. 
 
 ---
+
+This file also contain a .env file, which is present for the sake of explaining people new to app development what to store in a .env file. 
+A .env file must never be uploaded to a public github repo. That will make sensitive information easy to access, posing a threat to security. 
