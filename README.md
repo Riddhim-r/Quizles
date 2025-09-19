@@ -48,8 +48,8 @@
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/your-username/quiz-master-v1.git
-cd quiz-master-v1
+git clone https://github.com/Riddhim-r/Quizles.git
+cd Quizles
 ```
 
 2. **Create a virtual environment:**  
